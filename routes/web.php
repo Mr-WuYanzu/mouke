@@ -37,6 +37,8 @@ Route::prefix('/')->group(function(){
 	Route::get('teacher/teachercont','Teacher\TeacherController@teachercont');
 	//注册页面
 	Route::get('register','Login\LoginController@register');
+	//注册执行页面
+	Route::post('registerdo','Login\LoginController@registerdo');
 	//登录页面
 	Route::get('login','Login\LoginController@login');
 });

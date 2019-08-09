@@ -21,6 +21,6 @@ class AdminController extends Controller
     public function index(Request $request)
     {
     	//渲染视图
-    	return view('admin/index')
+    	return view('admin/index');
     }
 }
