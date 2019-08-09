@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{asset('css/course.css')}}"/>
 <link rel="stylesheet" href="{{asset('css/register-login.css')}}"/>
 <script src="{{asset('js/jquery.tabs.js')}}"></script>
-<script src="{{asset('js/mine.js')}]"></script>
+<script src="{{asset('js/mine.js')}}"></script>
 
 <!-- InstanceBeginEditable name="EditRegion1" -->
 <div class="login" style="background:url(images/12.jpg) right center no-repeat #fff">

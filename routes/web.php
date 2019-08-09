@@ -43,6 +43,15 @@ Route::prefix('/')->group(function(){
 	Route::get('login','Login\LoginController@login');
 });
 
+//用户找回密码功能
+Route::get('/getpwd','pwd\RetrieveController@getpwd');
+//用户找回密码执行
+Route::post('/getpwdDo','pwd\RetrieveController@getpwdDO');
+//用户找回密码验证通过，修改密码页面
+Route::get('/updpwd','pwd\RetrieveController@updpwd');
+//用户重置密码
+Route::post('/setpwd','pwd\RetrieveController@setpwd');
+
 //后台模块
 Route::prefix('/admin')->group(function(){
 	//后台首页
