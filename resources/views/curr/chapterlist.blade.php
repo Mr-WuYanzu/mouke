@@ -93,43 +93,44 @@ $(function(){
 					</div>
                    </dl>                   
 				</div>
+
+
 				<div class="hide">
+                    <form method="post">
 					<div>
                     <div id="star">
                         <span class="startitle">请打分</span>
-                        <ul>
-                            <li><a href="javascript:;">1</a></li>
-                            <li><a href="javascript:;">2</a></li>
-                            <li><a href="javascript:;">3</a></li>
-                            <li><a href="javascript:;">4</a></li>
-                            <li><a href="javascript:;">5</a></li>
+                        <ul id="grade">
+                            <li class="num"><a href="javascript:;">1</a></li>
+                            <li class="num"><a href="javascript:;">2</a></li>
+                            <li class="num"><a href="javascript:;">3</a></li>
+                            <li class="num"><a href="javascript:;">4</a></li>
+                            <li class="num"><a href="javascript:;">5</a></li>
                         </ul>
                         <span></span>
                         <p></p>
 	                  </div>
                     <div class="c_eform">                      
-                        <textarea rows="7" class="pingjia_con" onblur="if (this.value =='') this.value='评价详细内容';this.className='pingjia_con'" onclick="if (this.value=='评价详细内容') this.value='';this.className='pingjia_con_on'">评价详细内容</textarea>
-                       <a href="#" class="fombtn">发布评论</a>
+                        <textarea rows="7" id="comment_detail" class="pingjia_con" onblur="if (this.value =='') this.value='评价详细内容';this.className='pingjia_con'" onclick="if (this.value=='评价详细内容') this.value='';this.className='pingjia_con_on'">评价详细内容</textarea>
+                       <a style="cursor:pointer;" id="addComment" class="fombtn">发布评论</a>
                        <div class="clearh"></div>
                     </div>
+                    </form>
 					<ul class="evalucourse">
+                        @foreach($commentInfo as $v)
                     	<li>
-                        	<span class="pephead"><img src="images/0-0.JPG" width="50" title="候候">
-                            <p class="pepname">候候候候</p>                           
+                        	<span class="pephead"><img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">
+                            <p class="pepname">{{$v['user_name']}}</p>                           
                             </span>
-                            <span class="pepcont"><p>2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013试真3年国家公。</p>
-                            <p class="peptime pswer">2015-01-02</p></span>
+                            <span class="pepcont"><p>{{$v['comment_detail']}}</p>
+                            <p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p></span>
                         </li>
-                        <li>
-                        	<span class="pephead"><img src="images/0-0.JPG" width="50" title="候候">
-                            <p class="pepname">候候15kpiii</p>                           
-                            </span>
-                            <span class="pepcont"><p>2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公。</p>
-                            <p class="peptime pswer">2015-01-02</p></span>
-                        </li>
+                        @endforeach
                     </ul>
 				</div>
 				</div>
+
+
                 <div class="hide">
 					<div>
                      <h3 class="pingjia">提问题</h3>
@@ -345,5 +346,49 @@ $(function(){
 
 
 <div class="clearh"></div>
+
+<script type="text/javascript">
+    $(function(){
+        layui.use(['layer'],function(){
+            var layer=layui.layer;
+
+            //发布评论
+            $('#addComment').click(function(){
+                var obj={};
+                //获取评论内容
+                obj.comment_detail=$('#comment_detail').val();
+                //获取打分项
+                var curr_grade=$('#grade').children('li.on').last().children('a').text();
+
+                //非空判断
+                if(curr_grade==''){
+                    layer.msg('请先打分',{icon:5,time:1000});
+                    return false;
+                }
+
+                if(obj.comment_detail==''){
+                    layer.msg('请输入评论内容',{icon:5,time:1000});
+                    return false;
+                }
+                
+                //发送请求提交数据
+                $.post(
+                    '/curr/comment/addHandle',
+                    {data:obj,curr_grade:curr_grade},
+                    function(res){
+                        layer.msg(res.font,{icon:res.skin,time:1000},function(){
+                            if(res.code==1){
+                                location.href='/curr/chapterlist';
+                            }
+                        });
+                    },
+                    'json'
+                )
+
+            });
+
+        });
+    });
+</script>
 
 @endsection

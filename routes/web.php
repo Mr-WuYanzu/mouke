@@ -41,6 +41,8 @@ Route::prefix('/')->group(function(){
 	Route::post('registerdo','Login\LoginController@registerdo');
 	//登录页面
 	Route::get('login','Login\LoginController@login');
+	//课程留言评论处理
+	Route::post('curr/comment/addHandle','Curr\CurrCommentController@addHandle');
 });
 
 //用户找回密码功能

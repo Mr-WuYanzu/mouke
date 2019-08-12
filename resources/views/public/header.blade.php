@@ -5,6 +5,7 @@
 <title>@yield('title')</title>
 
 <script src="{{asset('js/jquery-1.8.0.min.js')}}"></script>
+<script src="{{asset('layui/layui.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/rev-setting-1.js')}}"></script>
 <script type="text/javascript" src="{{asset('rs-plugin/js/jquery.themepunch.revolution.min.js')}}"></script>
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Curr;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\CommonController;
+use App\Model\CurrCommentModel;
+use Illuminate\Support\Facades\Redis;
 /**
  * 课程模块类
  * class CurrController
@@ -11,7 +13,7 @@ use App\Http\Controllers\Controller;
  * @package  App\Http\Controllers\Curr
  * @date 2019-08-08
  */
-class CurrController extends Controller
+class CurrController extends CommonController
 {
 	/**
 	 * [课程列表]
@@ -41,8 +43,14 @@ class CurrController extends Controller
      */
     public function chapterlist(Request $request)
     {
+        //接收课程id
+        $curr_id=1;
+        //实例化模型类
+        $commentModel=new CurrCommentModel();
+        //查询该课程下所有评论信息
+        $commentInfo=$commentModel->where('curr_id',$curr_id)->orderBy('create_time','desc')->get()->toArray();
     	//渲染模版
-    	return view('curr/chapterlist');
+    	return view('curr/chapterlist',compact('commentInfo'));
     }
 
     /**
