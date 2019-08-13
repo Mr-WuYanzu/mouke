@@ -26,7 +26,7 @@ $(function(){
 <div class="coursecont">
 <div class="coursepic1">
    <div class="coursetitle1">
-    	<h2 class="courseh21">会计财经法规与会计职业道德</h2>
+    	<h2 class="courseh21">{{$currInfo['curr_name']}}</h2>
 		<div  style="margin-top:-40px;margin-right:25px;float:right;">
 		<div class="bdsharebuttonbox">
 			<a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a>
@@ -46,9 +46,9 @@ $(function(){
 	   <img src="images/c1.jpg" height="140">	   
    </div>
    <div class="course_xq">
-       <span class="courstime1"><p>课时<br/><span class="coursxq_num">100课时</span></p></span>
-	   <span class="courstime1"><p>学习人数<br/><span class="coursxq_num">25987人</span></p></span>
-	   <span class="courstime1"><p style="border:none;">课程时长<br/><span class="coursxq_num">3小时20分</span></p></span>
+       <span class="courstime1"><p>课时<br/><span class="coursxq_num">{{$currInfo['classNum']}}课时</span></p></span>
+	   <span class="courstime1"><p>学习人数<br/><span class="coursxq_num">{{$currInfo['study_num']}}人</span></p></span>
+	   <span class="courstime1"><p style="border:none;">课程时长<br/><span class="coursxq_num">不详</span></p></span>
    </div>
    <div class="course_xq2">
       <a class="course_learn" href="/curr/video">开始学习</a>
@@ -69,28 +69,17 @@ $(function(){
 			<div class="tab_box">
 				<div>
 					<dl class="mulu noo">
-					<div>
-                        <dt class="mulu_title"><span class="mulu_img"></span>第一章&nbsp;&nbsp;总论
-						<span class="mulu_zd">+</span></dt>
-						<div class="mulu_con">
-							<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计的概念与目标</strong></dd>
-							<a href="video.html"><dd><strong class="cataloglink">课时1：会计的概念与目标1</strong><i class="fini nn"></i></dd></a>
-							<a href="video.html"><dd><strong class="cataloglink">课时2：会计的概念与目标2</strong><i class="fini fn"></i></dd></a>
-							<dd class="smalltitle"><strong>第二节&nbsp;&nbsp;会计的职能与方法</strong></dd>
-							<a href="video.html"><dd><strong class="cataloglink">课时1：会计的职能与方法1</strong><i class="fini nn"></i></dd></a>
-							<a href="video.html"><dd><strong class="cataloglink">课时2：会计的职能与方法2</strong><i class="fini fn"></i></dd></a>
-							<a href="video.html"><dd><strong class="cataloglink">课时1：会计的职能与方法3</strong><i class="fini ff"></i></dd></a>
-						</div>
-					</div>
-					<div>
-                        <dt class="mulu_title"><span class="mulu_img"></span>第二章&nbsp;&nbsp;会计要素与会计等式
-						<span class="mulu_zd">+</span></dt>
-						<div class="mulu_con">
-							<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计要素</strong></dd>
-							<a href="video.html"><dd><strong class="cataloglink">课时1：会计要素与会计等式1</strong><i class="fini nn"></i></dd></a>
-							<a href="video.html"><dd><strong class="cataloglink">课时2：会计要素与会计等式2</strong><i class="fini nn"></i></dd></a>
-						</div>
-					</div>
+                        @foreach($chapterInfo as $k=>$v)
+                            <div>
+                                <dt class="mulu_title"><span class="mulu_img"></span>第{{$v['chapter_num']}}章&nbsp;&nbsp;{{$v['chapter_name']}}
+                                <span class="mulu_zd">+</span></dt>
+                                <div class="mulu_con">
+                                    @foreach($v['son'] as $kk=>$vv)
+                                    <a href="video.html"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
                    </dl>                   
 				</div>
 
