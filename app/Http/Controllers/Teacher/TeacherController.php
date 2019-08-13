@@ -20,8 +20,10 @@ class TeacherController extends Controller
 	 */
     public function teacherList(Request $request)
     {
-    	//渲染视图
-    	return view('teacher/teacherlist');
+        //渲染视图
+        $user_id = session('user_id');
+        // dd($user_id);
+    	return view('teacher/teacherlist',['user_id'=>$user_id]);
     }
 
     /**

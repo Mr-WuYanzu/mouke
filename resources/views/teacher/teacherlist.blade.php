@@ -10,7 +10,7 @@
 
 <!-- InstanceBeginEditable name="EditRegion1" -->
 <div class="coursecont" style="background: none repeat scroll 0 0 #fff;border-radius: 3px;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" >
-    <h3 class="righttit" style="padding-left:50px;">优秀讲师</h3>
+	<h3 class="righttit" style="padding-left:50px;">优秀讲师<a href="{{url('http://teacher.com/apply')}}/{{$user_id}}" style="margin:830px">申请成为讲师</a></h3>
 	<div class="coursepic tecti">
 		<div class="teaimg">
 		<a href="/teacher/teachercont" target="_blank"><img src="images/teacher.jpg" width="150"></a>

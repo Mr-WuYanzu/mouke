@@ -13,13 +13,7 @@
 <div class="register" style="background:url(images/13.jpg) right center no-repeat #fff">
 <h2>注册</h2>
 
-@if($errors->any())
-    <div>
-        @foreach($errors->all() as $v)
-            <p>{{$v}}</p>
-            @endforeach
-    </div>
-@endif
+
 
 
 
@@ -68,10 +62,10 @@
 <script src="/layui/layui.js"></script>
 <script src="/layui/css/layui.css"></script>
 <script>
+
 $(function(){
     layui.use(['layer'],function(){
         var layer = layui.layer;
-        //邮箱验证
         /*
             $("input[name='user_mail']").blur(function(){
                 var user_mail = $("input[name='user_mail']").val();
@@ -177,9 +171,21 @@ $(function(){
 
             $.post(
                 '/registerdo',
-                {user_mail:user_mail,user_name:user_name,pwd:pwd,_token:_token},
+                {user_mail:user_mail,user_name:user_name,pwd:pwd,pwd1:pwd1,_token:_token},
                 function(res){
-                    console.log(res);
+                    if(res == 1){
+                        layer.msg('注册成功，即将跳转登陆页面',{icon:6},function(){
+                            location.href="{{url('/login')}}";
+                        });
+                    }else if(res == 2){
+                        layer.msg('注册失败',{icon:2});
+                    }else if(res == 3){
+                        layer.msg('两次密码不一致！',{icon:7});
+                    }else if(res == 4){
+                        layer.msg('用户名已存在',{icon:7});
+                    }else if(res == 5){
+                        layer.msg('邮箱已被注册',{icon:7});
+                    }
                 }
             )
         
