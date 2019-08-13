@@ -24,12 +24,18 @@ class TeacherController extends Controller
 	 */
     public function teacherList(Request $request)
     {
+
         //实例化模型类
         $teacherModel=new TeacherModel();
         //查询所有通过审核的讲师信息
         $teacherInfo=$teacherModel->where('status',2)->orderBy('t_good','desc')->get()->toArray();
-    	//渲染视图
-    	return view('teacher/teacherlist',compact('teacherInfo'));
+
+
+        //渲染视图
+        $user_id = session('user_id');
+        // dd($user_id);
+    	return view('teacher/teacherlist',['user_id'=>$user_id,'teacherInfo'=>$teacherInfo]);
+
     }
 
     /**

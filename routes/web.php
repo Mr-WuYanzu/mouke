@@ -43,10 +43,15 @@ Route::prefix('/')->group(function(){
 	Route::post('registerdo','Login\LoginController@registerdo');
 	//登录页面
 	Route::get('login','Login\LoginController@login');
+
 	//课程留言评论处理
 	Route::post('curr/comment/addHandle','Curr\CurrCommentController@addHandle');
 	#题库
     Route::get('/item_bank/{id?}','Test\TestController@item_bank');
+
+	//登录页面
+	Route::post('logindo','Login\LoginController@logindo');
+
 });
 
 //用户找回密码功能
