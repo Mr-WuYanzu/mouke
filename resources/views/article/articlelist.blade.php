@@ -13,22 +13,34 @@
 	<h3 class="righttit">全部资讯</h3>
     <div class="clearh"></div>
     <span class="bread nob">
-        <a class="fombtn cur" href="articlelist.html">全部资讯</a>
-        <a class="fombtn" href="articlelist.html">热门资讯</a>
-        <a class="fombtn" href="articlelist.html">考试指导</a>
-        <a class="fombtn" href="articlelist.html">精彩活动</a>
+        @foreach($cate_Info as $k=>$v)
+            <a class="fombtn cur" href="javascript:;" info_cate_id="{{$v->info_cate_id}}">{{$v->info_name}}</a>
+        @endforeach
     </span>
     
 </div>
 <div class="clearh"></div>
+
 <div class="coursetext">
 	<div class="articlelist">
-    	<h3><a class="artlink" href="/article/articlecont">2015年第一季度山西省会计从业资格考务日程安排</a></h3>
-        <p>2015年第一季度山西省会计从业资格考务日程安排已公布，望各位同学周知。 按照《山西省财政厅关于印发会计从业资格无纸化考试管理规定的通知》(晋财会【2014】5号)，现将我省2015年一季度会计从业资格考试考务安排如下。 一、考试时间： 1、网上报名时间：3月2...</p>
-        <p class="artilabel">
-        <span class="ask_label">热门资讯</span>
-        <b class="labtime">2015-02-02</b>
-        </p>
+        @foreach($Info as $k=>$v)
+            <h3><a class="artlink" href="/article/articlecont/{{$v->info_id}}">{{$v->info_title}}</a></h3>
+            <p>
+                @if(strlen($v->info_desc)>10)
+                    <?php
+                    $a=substr($v->info_desc,0,24);
+                    $b=$a.".....";
+                    echo $b;
+                    ?>
+                @else
+                    {{$v->info_desc}}
+                @endif
+            </p>
+            <p class="artilabel">
+            <span class="ask_label">{{$v->info_name}}</span>
+            <b class="labtime">{{date('Y-m-d h:i:s',$v->create_time)}}</b>
+            </p>
+        @endforeach
         <div class="clearh"></div>
     </div>
     
@@ -50,13 +62,16 @@
     <div class="clearh" style="height:10px;"></div>
 </div>
 
+
 <div class="courightext">
 <div class="ctext">
     <div class="cr1">
     <h3 class="righttit">热门资讯</h3>
     <div class="gonggao">
 	<ul class="hotask">
-        	<li><a class="ask_link" href="#"><strong>●</strong>请问女子监狱人民狱人民警察?</a></li>
+        @foreach($hot as $k=>$v)
+            <li><a class="ask_link" href="/article/articlecont/{{$v->info_id}}"><strong>●</strong>{{$v->info_title}}</a></li>
+        @endforeach
         </ul>
     </div>
     </div>
@@ -82,8 +97,25 @@
 <div class="clearh"></div>
 </div>
 <!-- InstanceEndEditable -->
-
-
 <div class="clearh"></div>
+
+<script>
+    $(function () {
+        $('.fombtn').click(function(){
+            //获取当前点击的 分类id
+            var info_cate_id=$(this).attr('info_cate_id');
+            $.post(
+                '/article/info_cate_name',
+                {info_cate_id:info_cate_id},
+                function(res){
+                    // console.log(res);
+                    if(res){
+                        $('.coursetext').html(res);
+                    }
+                }
+            )
+        })
+    })
+</script>
 
 @endsection

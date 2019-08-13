@@ -29,8 +29,10 @@ Route::prefix('/')->group(function(){
 	Route::get('curr/video','Curr\CurrController@video');
 	//资讯列表
 	Route::get('article/articlelist','Article\ArticleController@articleList');
+	    // 点击资讯分类切换不同分类下的资讯
+        Route::post('article/info_cate_name','Article\ArticleController@info_cate_name');
 	//资讯详情
-	Route::get('article/articlecont','Article\ArticleController@articlecont');
+	Route::get('article/articlecont/{id}','Article\ArticleController@articlecont');
 	//讲师列表
 	Route::get('teacher/teacherlist','Teacher\TeacherController@teacherList');
 	//讲师详情
@@ -43,6 +45,8 @@ Route::prefix('/')->group(function(){
 	Route::get('login','Login\LoginController@login');
 	//课程留言评论处理
 	Route::post('curr/comment/addHandle','Curr\CurrCommentController@addHandle');
+	#题库
+    Route::get('/item_bank/{id?}','Test\TestController@item_bank');
 });
 
 //用户找回密码功能
