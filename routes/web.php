@@ -21,10 +21,12 @@ Route::prefix('/')->group(function(){
 	Route::get('index','Index\IndexController@index');
 	//课程列表
 	Route::get('curr/currlist','Curr\CurrController@currList');
+    //课程分类搜索
+    Route::post('cateSearch','Curr\CurrController@cateSearch');
 	//课程详情
-	Route::get('curr/currcont','Curr\CurrController@currcont');
+	Route::get('curr/currcont/{curr_id}','Curr\CurrController@currcont');
 	//章节列表
-	Route::get('curr/chapterlist','Curr\CurrController@chapterlist');
+	Route::get('curr/chapterlist/{curr_id}','Curr\CurrController@chapterlist');
 	//开始学习
 	Route::get('curr/video','Curr\CurrController@video');
 	//资讯列表
