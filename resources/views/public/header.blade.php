@@ -62,10 +62,10 @@ function nTabs(thisObj,Num){
         </span>-->
 
         <!--未登录-->
-            <span class="exambtn_lore">
+                <span class="exambtn_lore">
                  <a class="tkbtn tklog" href="/login">登录</a>
                  <a class="tkbtn tkreg" href="/register">注册</a>
-            </span>
+                </span>
             <!--登录后-->
             <!--<div class="logined">
                 <a href="mycourse.html"  onMouseOver="logmine()" style="width:70px" class="link2 he ico" target="_blank">sherley</a>

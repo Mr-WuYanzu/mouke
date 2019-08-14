@@ -10,6 +10,7 @@ use App\Model\TeacherModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonController;
 use App\Model\CurrCommentModel;
+use App\Model\CurrCollectModel;
 use Illuminate\Support\Facades\Redis;
 /**
  * 课程模块类
@@ -170,4 +171,27 @@ class CurrController extends CommonController
         //渲染模版
         return view('curr/video');
     }
+
+    public function collectdo(Request $request)
+    {
+        $curr_id = $request->curr_id;
+        $user_id = session('user_id');
+        $time = time();
+        $data = [
+            'curr_id'=>$curr_id,
+            'user_id'=>$user_id,
+            'status'=>1,
+            'create_time'=>$time
+        ];
+        $res = CurrCollectModel::insert($data);
+//        echo $res;die;
+        if($res==1){
+            return ['code'=>200,'msg'=>'收藏成功'];
+        }else{
+            return ['code'=>400,'msg'=>'收藏失败'];
+        }
+//        echo $user_id;die;
+
+    }
+
 }

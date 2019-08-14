@@ -27,7 +27,12 @@
 		<p class="courstime">讲师：{{$teacherInfo['t_name']}}</p>
 		<p class="courstime">课程评价：<img width="71" height="14" src="images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
         <!--<p><a class="state end">完结</a></p>-->      
-        <span class="coursebtn"><a class="btnlink" href="/curr/chapterlist">加入学习</a><a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a><a class="codol sc" href="#">收藏课程</a></span> 
+        <span class="coursebtn">
+            <a class="btnlink" href="/curr/chapterlist">加入学习</a>
+            <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
+            <a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
+            {{--<a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>--}}
+        </span>
 		<div style="clear:both;"></div>
 		<div id="bds">
             <div class="bdsharebuttonbox">
@@ -129,4 +134,38 @@
 
 <div class="clearh"></div>
 
+
+
+
+
 @endsection
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/layui/layui.js"></script>
+<script src="/layui/css/layui.css"></script>
+<script>
+    $(function(){
+        layui.use(['layer'],function(){
+            var layer = layui.layer;
+
+            $("#btn").click(function(){
+                var curr_id = $(this).attr('curr_id');
+                $.post(
+                    '/curr/collectdo',
+                    {curr_id:curr_id},
+                    function(res){
+                        console.log(res);
+                        var code = res.code;
+                        if(code == 200){
+                            layer.msg(res.msg,{icon:6});
+                        }else{
+                            layer.msg(res.msg,{icon:2});
+                        }
+                    }
+                )
+
+            })
+
+        })
+    })
+
+</script>

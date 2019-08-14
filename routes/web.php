@@ -21,6 +21,8 @@ Route::prefix('/')->group(function(){
 	Route::get('index','Index\IndexController@index');
 	//课程列表
 	Route::get('curr/currlist','Curr\CurrController@currList');
+	//课程收藏
+	Route::post('curr/collectdo','Curr\CurrController@collectdo');
     //课程分类搜索
     Route::post('cateSearch','Curr\CurrController@cateSearch');
 	//课程详情
@@ -55,7 +57,8 @@ Route::prefix('/')->group(function(){
 	Route::post('logindo','Login\LoginController@logindo');
 
 });
-
+//个人中心页面
+Route::get('/center','user\UserController@usercenter');
 //用户找回密码功能
 Route::get('/getpwd','pwd\RetrieveController@getpwd');
 //用户找回密码执行

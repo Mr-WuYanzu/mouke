@@ -10,7 +10,7 @@
 <script src="{{asset('js/mine.js')}}"></script>
 
 <!-- InstanceBeginEditable name="EditRegion1" -->
-<div class="login" style="background:url(images/12.jpg) right center no-repeat #fff">
+<div class="login" style="background:url(/images/12.jpg) right center no-repeat #fff">
 <h2>登录</h2>
 <form  onsubmit="return check();" method="post" style="width:600px">
 <input type="hidden" value="{{csrf_token()}}" id="_token">
@@ -115,7 +115,6 @@
                         //305 账号已锁定您剩余多少次机会
                         // console.log(res);
                         var code = res.code;
-                        // console.log(code);
                         if(code == 200){
                             layer.msg(res.msg,{icon:6},function(){
                                 location.href = "{{url('/index')}}";
@@ -134,6 +133,14 @@
                             layer.msg(res.msg,{icon:2});
                         }else if(code == 305){
                             layer.msg(res.msg,{icon:2});
+                        }else if(res == 1){
+                            layer.msg('密码错误！',{icon:2})
+                        }else if(res == 2){
+                            layer.msg('登陆成功，即将进入主页！',{icon:6},function(){
+                                location.href = "{{url('/index')}}";
+                            })
+                        }else if(res == 3){
+                            layer.msg('用户名不存在！',{icon:7})
                         }
                     }
                 )
