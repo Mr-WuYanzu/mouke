@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonController;
 use App\Model\CurrCommentModel;
 use Illuminate\Support\Facades\Redis;
+use DB;
 /**
  * 课程模块类
  * class CurrController
@@ -170,4 +171,46 @@ class CurrController extends CommonController
         //渲染模版
         return view('curr/video');
     }
+
+    /**
+     * [订阅课程]
+     * @param Request $request
+     */
+    public function subscribe(Request $request){
+        #接受课程id
+        $curr_id=$request->curr_id;
+        #接受用户id
+        $user_id=session('user_id');
+        #根据课程id 查询课程表中的 价格
+        $curr_price=DB::table('curr')->where(['curr_id'=>$curr_id])->value('curr_price');
+        #拼装 存入订单表的数据
+        $arr=[
+            'user_id'=>$user_id,
+            'order_no'=>$this->order_no($user_id),
+            'curr_id'=>$curr_id,
+            'amount'=>$curr_price
+        ];
+        #先查询用户是否已经订阅
+        $select=DB::table('curr_order')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->first();
+        if($select){
+            return ['code'=>1,'msg'=>'您已经订阅---》请勿重复订阅'];
+        }else{
+            $insert=DB::table('curr_order')->insert($arr);
+            if($insert){
+                return ['code'=>100,'msg'=>'订阅成功'];
+            }else{
+                return ['code'=>1,'msg'=>'订阅失败请重试'];
+            }
+        }
+    }
+
+    /**
+     * [订单单号]
+     * @param $user_id
+     */
+    public function order_no($user_id){
+        $rand=mt_rand(111111,999999).time().$user_id;
+        return $rand;
+    }
+
 }
