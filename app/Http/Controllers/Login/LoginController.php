@@ -57,7 +57,6 @@ class LoginController extends Controller
 		}else{
 			echo "2";die;
 		}
-
 		/*
 			$validate =  $request->validate(
 				['user_mail'=>"required|unique:user,user_mail|regex:/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$",
