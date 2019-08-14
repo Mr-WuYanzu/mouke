@@ -3,7 +3,6 @@
 @section('title','课程内容')
 
 @section('content')
-
 <link rel="stylesheet" href="{{asset('css/course.css')}}"/>
 <script src="{{asset('js/jquery.tabs.js')}}"></script>
 <script src="{{asset('js/mine.js')}}"></script>
@@ -31,8 +30,12 @@
             <a class="btnlink" href="/curr/chapterlist">加入学习</a>
             <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
             <a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
-            {{--<a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>--}}
         </span>
+            <span class="exambtn_lore">
+                <a class="tkbtn tklog" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
+            </span>
+        </span>
+
 		<div style="clear:both;"></div>
 		<div id="bds">
             <div class="bdsharebuttonbox">
@@ -133,6 +136,31 @@
 
 
 <div class="clearh"></div>
+<script>
+    $(function(){
+        //点击订阅
+        $(document).on('click','#subscribe',function(){
+            //获取课程id
+            var curr_id=$(this).attr('curr_id');
+            $.post(
+                "/course/subscribe",
+                {curr_id:curr_id},
+                function(res){
+                    // console.log(res);
+                    if(res.code == 100){
+                        alert(res.msg);
+                    }else if(res.code == 2){
+                        alert(res.msg);
+                        location.href='/login';
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+                ,'json '
+            )
+        })
+    })
+</script>
 
 
 

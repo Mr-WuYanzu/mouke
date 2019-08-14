@@ -76,3 +76,5 @@ Route::prefix('/admin')->group(function(){
 	Route::get('index','Admin\AdminController@index');
 });
 
+#订阅课程
+Route::post('/course/subscribe','Curr\CurrController@subscribe');

@@ -20,29 +20,37 @@
 <form onsubmit="return check();" method="post">
     <input type="hidden" value="{{csrf_token()}}" id="_token">
     <div>
-    <p class="formrow">
-        <label class="control-label" for="register_email">邮箱地址</label>
-        <input type="text" name='user_mail'>
-    </p>
-    <span class="text-danger">请输入邮箱地址</span>
+        <p class="formrow">
+            <label class="control-label" for="register_email">邮箱地址</label>
+            <input type="text" name='user_mail'>
+            <span class="text-danger">请输入邮箱地址</span>
+        </p>
     </div>
+
     <div>
-    <p class="formrow"><label class="control-label" for="register_email">昵称</label>
-    <input type="text" name='user_name' id='name'></p>
-    <span class="text-danger">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</span>
+        <p class="formrow"><label class="control-label" for="register_email">昵称</label>
+            <input type="text" name='user_name' id='name'>
+            <span class="text-danger">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</span>
+        </p>
     </div>
+
     <div>
-    <p class="formrow"><label class="control-label" for="register_email">密码</label>
-    <input type="password" name='pwd' name='pwd'></p>
-    <span class="text-danger">5-20位英文、数字、符号，区分大小写</span>
+        <p class="formrow">
+            <label class="control-label" for="register_email">密码</label>
+            <input type="password" name='pwd' name='pwd'>
+            <span class="text-danger">5-20位英文、数字、符号，区分大小写</span>
+        </p>
     </div>
+
     <div>
-    <p class="formrow"><label class="control-label" for="register_email">确认密码</label>
-    <input type="password" name='pwd1' id='pwd1'></p>
-    <span class="text-danger">再输入一次密码</span>
+        <p class="formrow"><label class="control-label" for="register_email">确认密码</label>
+            <input type="password" name='pwd1' id='pwd1'>
+            <span class="text-danger">再输入一次密码</span>
+        </p>
     </div>
+
     <div class="loginbtn reg">
-    <button type="button" class="uploadbtn ub1" id="btn">注册</button>
+        <button type="button" class="uploadbtn ub1" id="btn">注册</button>
     </div>
 
 </form>
@@ -68,7 +76,7 @@ $(function(){
         var layer = layui.layer;
         /*
             $("input[name='user_mail']").blur(function(){
-                var user_mail = $("input[name='user_mail']").val();
+                var user_mail = $(this).val();
                 var reg_mail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
                 if(user_mail == ''){
                     layer.msg('邮箱必填',{icon:2});
@@ -89,7 +97,7 @@ $(function(){
                     layer.msg('请注意查看用户名规则',{icon:7});
                     return false;
                 }
-            })    
+            })
             //密码验证
             $("input[name='pwd']").blur(function(){
                 var pwd = $("input[name='pwd']").val();
@@ -100,8 +108,8 @@ $(function(){
                 }else if(!reg.test(pwd)){
                     layer.msg('请注意查看密码规则',{icon:7});
                     return false;
-                    
-                }           
+
+                }
             })
             //二次密码验证
             $("input[name='pwd1']").blur(function(){
