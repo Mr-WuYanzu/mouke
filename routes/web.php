@@ -28,7 +28,9 @@ Route::prefix('/')->group(function(){
 	//章节列表
 	Route::get('curr/chapterlist/{curr_id}','Curr\CurrController@chapterlist');
 	//开始学习
-	Route::get('curr/video','Curr\CurrController@video');
+	Route::get('curr/video/{curr_id}','Curr\CurrController@video');
+    //获取点击课时的视频
+    Route::post('curr/getvideo','Curr\CurrController@getVideo');
 	//资讯列表
 	Route::get('article/articlelist','Article\ArticleController@articleList');
 	    // 点击资讯分类切换不同分类下的资讯

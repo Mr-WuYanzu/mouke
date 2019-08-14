@@ -60,7 +60,7 @@
 
 <body>
    <div class="linevideo" style="overflow-x:hidden">
-    	<span class="returnindex"><a class="gray" href="coursecont1.html" style="font-size:14px;">返回课程</a></span>   
+    	<span class="returnindex"><a class="gray" href="/curr/chapterlist/{{$curr_id}}" style="font-size:14px;">返回课程</a></span>
         <span class="taskspan"><span class="ts">课时100</span>&nbsp;&nbsp;<b class="tasktit">会计的概念与目标1</b></span> 
         <div style="width:100%;margin-top:20px;">
 			<video width="auto" id="example_video_1" class="video-js vjs-default-skin  vjs-big-play-centered vvi " controls preload="none"  poster="images/c8.jpg" data-setup="{}"><!--poster是视频未播放前的展示图片-->
@@ -96,30 +96,12 @@
 			<div class="tab_box tabcard">
 				<div style="padding-bottom:30px;">
 					<dl class="mulu noo1">
-                        <dt>第一章&nbsp;&nbsp;总论</dt>
-						<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计的概念与目标</strong></dd>
-                        <a href="#"><dd><i class="forwa nn"></i><strong class="cataloglink">课时1：会计的概念与目标1</strong></dd></a>
-                        <dd><i class="forwa fn"></i><strong class="cataloglink">课时2：会计的概念与目标2</strong></dd>
-
-                        <dt>第二章&nbsp;&nbsp;会计要素与会计等式</dt>
-						<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计要素</strong></dd>
-                        <dd><i class="forwa ff"></i><strong class="cataloglink">课时1：会计要素与会计等式1</strong></dd>
-                        <dd><i class="forwa nn"></i><strong class="cataloglink">课时2：会计要素与会计等式2</strong></dd>
-
-						<dt>第三章&nbsp;&nbsp;总论</dt>
-						<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计的概念与目标</strong></dd>
-                        <a href="#"><dd><i class="forwa nn"></i><strong class="cataloglink">课时1：会计的概念与目标1</strong></dd></a>
-                        <dd><i class="forwa nn"></i><strong class="cataloglink">课时2：会计的概念与目标2</strong></dd>
-
-						<dt>第四章&nbsp;&nbsp;总论</dt>
-						<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计的概念与目标</strong></dd>
-                        <a href="#"><dd><i class="forwa nn"></i><strong class="cataloglink">课时1：会计的概念与目标1</strong></dd></a>
-                        <dd><i class="forwa nn"></i><strong class="cataloglink">课时2：会计的概念与目标2</strong></dd>
-
-						<dt>第五章&nbsp;&nbsp;总论</dt>
-						<dd class="smalltitle"><strong>第一节&nbsp;&nbsp;会计的概念与目标</strong></dd>
-                        <a href="#"><dd><i class="forwa nn"></i><strong class="cataloglink">课时1：会计的概念与目标1</strong></dd></a>
-                        <dd><i class="forwa nn"></i><strong class="cataloglink">课时2：会计的概念与目标2</strong></dd>
+						@foreach($chapterInfo as $k=>$v)
+                        <dt>第{{$v['chapter_num']}}章&nbsp;&nbsp;{{$v['chapter_name']}}</dt>
+						@foreach($v['son'] as $kk=>$vv)
+                        <a href="#"><dd><i class="forwa nn"></i><strong class="cataloglink" class_hour_id="{{$vv['class_id']}}">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong></dd></a>
+							@endforeach
+						@endforeach
                    </dl>	
 				   <div class="clearh"></div>
 				</div>
@@ -170,3 +152,40 @@
     </div>
 </body>
 </html>
+<script>
+	$(function () {
+		$(document).on('click','.cataloglink',function () {
+			var class_id = $(this).attr('class_hour_id');
+			var example_video_1 = $('#example_video_1');
+			$.ajax({
+				url:'/curr/getvideo',
+				type:'post',
+				data:{class_id:class_id},
+				dataType:'json',
+				success:function (res) {
+					if(res.status==200){
+						if(res.video_type=='mp4'){
+							example_video_1.empty();
+							example_video_1.append('<source src="'+res.video_url+'" type="video/mp4" />');
+						}else if(res.video_type=='webm'){
+							example_video_1.empty();
+							example_video_1.append('<source src="'+res.video_url+'" type="video/webm" />');
+						}else if(res.video_type=='ogv'){
+							example_video_1.empty();
+							example_video_1.append('<source src="'+res.video_url+'" type="video/ogg" />');
+						}
+					}else if(res.status==201){
+						a=confirm('这是一个直播课时，是否跳转至直播页面');
+						if(a){
+							location.href=res.live_url;
+						}else{
+							a.close();
+						}
+					}else{
+						alert(res.msg);
+					}
+				}
+			})
+		})
+	})
+</script>

@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonController;
 use App\Model\CurrCommentModel;
 use Illuminate\Support\Facades\Redis;
+use mysql_xdevapi\Collection;
+
 /**
  * 课程模块类
  * class CurrController
@@ -141,14 +143,31 @@ class CurrController extends CommonController
         //查询课程章节
         $chapter = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
         $chapterInfo=$this->getClassHour($chapter);
+        //查询相关课程
+        $Relevant_curr = $this->relevant_curr($currInfo);
+//        dd($Relevant_curr);
         //实例化模型类
         $commentModel=new CurrCommentModel();
         //查询该课程下所有评论信息
         $commentInfo=$commentModel->where('curr_id',$curr_id)->orderBy('create_time','desc')->get();
     	//渲染模版
-    	return view('curr/chapterlist',['commentInfo'=>$commentInfo,'currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapterInfo'=>$chapterInfo]);
+    	return view('curr/chapterlist',['commentInfo'=>$commentInfo,'currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapterInfo'=>$chapterInfo,'relevant_curr'=>$Relevant_curr]);
     }
 
+    //查找相关课程
+    public function relevant_curr($currInfo){
+        $curr_cate_id = $currInfo['curr_cate_id'];//获取分类id
+        //查找此分类的相关id
+        $pid = CurrCate::where(['curr_cate_id'=>$curr_cate_id])->value('pid');
+        $curr_info=[];
+        if($pid!==null){
+//            获取此分类的所有子类id
+            $cate_id=$this->getCateId(3);
+            //查询相关课程
+            $curr_info = CurrModel::where('curr_id','!=',$currInfo['curr_id'])->whereIn('curr_cate_id',$cate_id)->limit(4)->get();
+        }
+        return $curr_info;
+    }
 
     //查询章节下的课时
     public function getClassHour($chapterInfo){
@@ -165,9 +184,51 @@ class CurrController extends CommonController
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function video(Request $request)
+    public function video(Request $request,$curr_id)
     {
+        $curr_id = intval($curr_id);
+        //根据课程id查询课程详情
+        $currInfo = CurrModel::where(['curr_id'=>$curr_id])->first();
+        //查询课程章节
+        $chapter = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
+        $chapterInfo=$this->getClassHour($chapter);
+//        dd($chapterInfo);
         //渲染模版
-        return view('curr/video');
+        return view('curr/video',['chapterInfo'=>$chapterInfo,'curr_id'=>$curr_id]);
+    }
+
+    //获取点击课时的视频
+    public function getVideo(Request $request){
+        $teacher_id = 2;
+
+        $class_id = $request->post('class_id');
+        //根据课时id查询课时
+        $classInfo = CurrClassHourModel::where(['class_id'=>$class_id])->first();
+        if($classInfo){
+            if($classInfo['class_type']==1){
+                return ['status'=>201,'msg'=>'ok','live_url'=>$classInfo['class_data']];
+            }else{
+                //判断视频类型
+                $video_type='';
+                if(!empty($classInfo['class_data'])){
+                    $a = substr($classInfo['class_data'],-9);
+                    $b = explode('.',$a);
+                    switch ($b[1]??''){
+                        case 'mp4':
+                            $video_type=$b[1];
+                            break;
+                        case 'webm':
+                            $video_type=$b[1];
+                            break;
+                        case 'ogv':
+                            $video_type=$b[1];
+                            break;
+                    }
+                }
+                return ['status'=>200,'msg'=>'ok','video_url'=>$classInfo['class_data'],'video_type'=>$video_type];
+            }
+        }else{
+            return ['status'=>107,'msg'=>'课时不存在'];
+        }
     }
 }

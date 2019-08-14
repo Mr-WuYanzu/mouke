@@ -51,7 +51,7 @@ $(function(){
 	   <span class="courstime1"><p style="border:none;">课程时长<br/><span class="coursxq_num">不详</span></p></span>
    </div>
    <div class="course_xq2">
-      <a class="course_learn" href="/curr/video">开始学习</a>
+      <a class="course_learn" href="/curr/video/{{$currInfo['curr_id']}}">开始学习</a>
    </div> 
     <div class="clearh"></div>
 </div>
@@ -184,10 +184,10 @@ $(function(){
     <div class="teacher">
     <div class="teapic ppi">
     <a href="teacher.html" target="_blank"><img src="images/teacher.png" width="80" class="teapicy" title="张民智"></a>
-     <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">张民智</a><p style="font-size:14px;color:#666">会计讲师</p></h3>
+     <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
     </div>
     <div class="clearh"></div>
-    <p>十年以上Linux从业经验， 培训经验超过八年。在各 个知名培训机构做过金牌 讲师、学科负责人，培训 学员过万人。曾获红帽认 证讲师，微软认证讲师等 资质认证。教学以逻辑性 强、教学细致、知识点准 确著称。</p>
+    <p>{{$teacherInfo['t_desc']}}</p>
     </div>
     </div>
 </div>
@@ -211,21 +211,14 @@ $(function(){
     <div class="cr1">
     <h3 class="righttit">相关课程</h3>
     <div class="teacher">
+        @foreach($relevant_curr as $k=>$v)
     <div class="teapic">
-        <a href="#"  target="_blank"><img src="images/c1.jpg" height="60" title="财经法规与财经职业道德"></a>
-        <h3 class="courh3"><a href="#" class="peptitle" target="_blank">财经法规与财经职业道德</a></h3>
+        <a href="#"  target="_blank"><img src="images/c1.jpg" height="60" title="{{$v['curr_name']}}"></a>
+        <h3 class="courh3"><a href="#" class="peptitle" target="_blank">{{$v['curr_name']}}</a></h3>
     </div>
     <div class="clearh"></div>
-    <div class="teapic">
-        <a href="#"  target="_blank"><img src="images/c2.jpg" height="60" title="财经法规与财经职业道德"></a>
-        <h3 class="courh3"><a href="#" class="peptitle" target="_blank">财经法规与财经职业道德</a></h3>
-    </div>
-    <div class="clearh"></div>
-    <div class="teapic">
-        <a href="#"  target="_blank"><img src="images/c3.jpg" height="60" title="财经法规与财经职业道德"></a>
-        <h3 class="courh3"><a href="#" class="peptitle" target="_blank">财经法规与财经职业道德</a></h3>
-    </div>
-    <div class="clearh"></div>
+            @endforeach
+
     </div>
     </div>
 </div>
