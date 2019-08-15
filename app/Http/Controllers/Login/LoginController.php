@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Login;
-
 use Illuminate\Http\Request;
+//use App\Libs\SDK\SaeTOAuthV2;
+//use App\Libs\SDK\SaeTClientV2;
 use App\Http\Controllers\Controller;
 use App\Model\UserModel;
+//use SaeTOAuthV2;
 /**
  * 登录模块
  * class LoginController
@@ -37,14 +39,8 @@ class LoginController extends Controller
 		$user_name = $data['user_name'];
 		$pwd = $data['pwd'];
 		$pwd1 = $data['pwd1'];
-		
-		$mail = UserModel::where(['user_mail'=>$user_mail])->first();
-		$name = UserModel::where(['user_name'=>$user_name])->first();
-		if($mail){
-			echo "5";die;
-		}else if($name){
-			echo "4";die;
-		}else if($pwd != $pwd1){
+
+		if($pwd != $pwd1){
 			echo "3";die;
 		}
 		unset($data['pwd1']);
@@ -80,6 +76,32 @@ class LoginController extends Controller
 
 	}
 
+    /**
+     * 邮箱唯一性验证
+     */
+    public function checkmail(Request $request)
+    {
+        $user_mail = $request->post('user_mail');
+        $res = UserModel::where(['user_mail'=>$user_mail])->first();
+//        print_r($res);die;
+        if($res){
+//            echo 1111;die;
+            return ['code'=>300,'msg'=>'邮箱已存在！'];
+        }
+    }
+    /**
+     * 用户名唯一性验证
+     */
+    public function checkname(Request $request)
+    {
+        $user_name = $request->post('user_name');
+        $res = UserModel::where(['user_name'=>$user_name])->first();
+//        print_r($res);die;
+        if($res){
+//            echo 1111;die;
+            return ['code'=>300,'msg'=>'用户名已存在！'];
+        }
+    }
 	/**
 	 * [登录页面]
 	 * @param  Request $request [description]
@@ -212,4 +234,113 @@ class LoginController extends Controller
 			}
 		}
     }
+
+    /**
+     * 微博授权页面
+     */
+
+    public function callback(Request $request)
+    {
+        header("Access-Control-Allow-Origin:*");
+        set_time_limit(0);
+        $code = $request->code;
+//        dd($code);die;
+
+        $url = "https://api.weibo.com/oauth2/access_token?client_id=2961575350&client_secret=c9e9aa201d9558c60ea12f85a898702e&grant_type=authorization_code&redirect_uri=http://education.com/callback&code=".$code;
+        $data = $this->curl($url);
+//        dd($data);
+
+
+        //获取微博登陆用户的信息
+        $userInfo=json_decode($data,true);
+        $token = $userInfo['access_token'];
+        $uid = $userInfo['uid'];
+//        dd($userInfo);
+        $urla="https://api.weibo.com/2/users/show.json?access_token=$token&uid=$uid";
+//        dd($urla);
+//        $uu = $this->curl($urla);
+        $uu = file_get_contents($urla);
+//        dd($uu);
+        $user = json_decode($uu,true);
+        $user_name = $user['screen_name'];
+        $data = [
+            'user_name'=>$user_name,
+            'create_time'=>time()
+        ];
+        $res = UserModel::insert($data);
+//        dd($res);
+        if($res){
+//            $this->success("登陆成功");
+//            echo "11111";die;
+            echo "<script>alert('登陆成功');location.href='/index'</script>";
+        }else{
+//            $this->success("失败");
+//            echo "22222";die;
+            echo "<script>alert('登录失败，请重新登陆');location.href='/login'</script>";
+        }
+
+//        dd($user);
+    }
+
+    //失败提示
+     public function fail($font){
+        $arr=[
+            'font'=>$font,
+            'code'=>2
+        ];
+        echo json_encode($arr);exit;
+    }
+//成功提示
+    public function success($font){
+        $arr=[
+            'font'=>$font,
+            'code'=>1
+        ];
+        echo json_encode($arr);exit;
+    }
+
+    protected function curl($url)
+    {
+        //curl初始化
+        $curl = curl_init();
+        //设置抓取的url
+        curl_setopt($curl, CURLOPT_URL, $url);
+        //设置头文件的信息作为数据流输出
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        //设置获取的信息以文件流的形式返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,FALSE);
+        curl_setopt($curl,CURLOPT_SSL_VERIFYHOST,FALSE);
+        //设置post方式提交
+        curl_setopt($curl, CURLOPT_POST, 1);
+        //执行命令
+        $data = curl_exec($curl);
+        //关闭URL请求
+        curl_close($curl);
+        //显示获得的数据
+        return $data;
+    }
+/*
+    protected function get($url)
+    {
+        //curl初始化
+        $curl = curl_init();
+        //设置抓取的url
+        curl_setopt($curl, CURLOPT_URL, $url);
+        //设置头文件的信息作为数据流输出
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        //设置获取的信息以文件流的形式返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,FALSE);
+        curl_setopt($curl,CURLOPT_SSL_VERIFYHOST,FALSE);
+        //设置post方式提交
+        curl_setopt($curl, CURLOPT_GET, 1);
+        //执行命令
+        $data = curl_exec($curl);
+        //关闭URL请求
+        curl_close($curl);
+        //显示获得的数据
+        return $data;
+    }
+*/
 }
