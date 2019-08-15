@@ -44,4 +44,10 @@ return [
         ],
     ],
 
+    'weibo' => [
+        'client_id' => env('WEIBO_KEY'),
+        'client_secret' => env('WEIBO_SECRET'),
+        'redirect' => env('WEIBO_REDIRECT_URI'),
+    ]
+
 ];

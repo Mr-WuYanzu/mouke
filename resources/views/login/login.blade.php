@@ -43,7 +43,10 @@
     <span class="hezuo">使用合作网站账号登录</span>
     <div class="hezuoimg">
     <img src="images/hezuoqq.png" class="hzqq" title="QQ" width="40" height="40"/>
-    <img src="images/hezuowb.png" class="hzwb" title="微博" width="40" height="40"/>
+        {{----}}
+    <a href="https://api.weibo.com/oauth2/authorize?client_id=2961575350&response_type=code&redirect_uri=http://education.com/callback">
+        <img src="images/hezuowb.png" class="hzwb" id="weibo" title="微博" width="40" height="40"/>
+    </a>
     </div>
     
   </div>

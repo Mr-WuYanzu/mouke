@@ -62,7 +62,7 @@ function nTabs(thisObj,Num){
         </span>-->
 
         <!--未登录-->
-            @if(session('user_id')==null)
+            @if($user_id=='' )
                 <span class="exambtn_lore">
                  <a class="tkbtn tklog" href="/login">登录</a>
                  <a class="tkbtn tkreg" href="/register">注册</a>
@@ -85,6 +85,7 @@ function nTabs(thisObj,Num){
                 </span>
             </div>
             @endif
+            <!--登录后-->
 
             
             

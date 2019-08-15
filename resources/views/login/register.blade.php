@@ -74,18 +74,22 @@
 $(function(){
     layui.use(['layer'],function(){
         var layer = layui.layer;
-        /*
+
             $("input[name='user_mail']").blur(function(){
                 var user_mail = $(this).val();
                 var reg_mail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
-                if(user_mail == ''){
-                    layer.msg('邮箱必填',{icon:2});
-                    return false;
-                }else if(!reg.test(user_mail)){
-                    layer.msg('您的邮箱格式不正确',{icon:2});
-                    return false;
-                }
+                $.post(
+                    '/checkmail',
+                    {user_mail:user_mail},
+                    function (res) {
+                        // console.log(res);
+                        if(res.code==300){
+                            layer.msg(res.msg,{icon:7});
+                        }
+                    }
+                )
             })
+
             //用户性验证
             $("input[name='user_name']").blur(function(){
                 var user_name = $("input[name='user_name']").val();
@@ -98,6 +102,18 @@ $(function(){
                     return false;
                 }
             })
+                $.post(
+                    '/checkname',
+                    {user_name:user_name},
+                    function (res) {
+                        // console.log(res);
+                        if(res.code==300){
+                            layer.msg(res.msg,{icon:7});
+                        }
+                    }
+                )
+            })
+        /*
             //密码验证
             $("input[name='pwd']").blur(function(){
                 var pwd = $("input[name='pwd']").val();
@@ -189,10 +205,6 @@ $(function(){
                         layer.msg('注册失败',{icon:2});
                     }else if(res == 3){
                         layer.msg('两次密码不一致！',{icon:7});
-                    }else if(res == 4){
-                        layer.msg('用户名已存在',{icon:7});
-                    }else if(res == 5){
-                        layer.msg('邮箱已被注册',{icon:7});
                     }
                 }
             )

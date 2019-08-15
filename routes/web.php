@@ -45,6 +45,10 @@ Route::prefix('/')->group(function(){
 	Route::get('teacher/teachercont','Teacher\TeacherController@teachercont');
 	//注册页面
 	Route::get('register','Login\LoginController@register');
+	//注册邮箱唯一性验证
+    Route::post('checkmail','Login\LoginController@checkmail');
+    //用户名唯一性验证
+    Route::post('checkname','Login\LoginController@checkname');
 	//注册执行页面
 	Route::post('registerdo','Login\LoginController@registerdo');
 	//登录页面
@@ -57,6 +61,8 @@ Route::prefix('/')->group(function(){
 
 	//登录页面
 	Route::post('logindo','Login\LoginController@logindo');
+	//微博登录
+	Route::any('callback','Login\LoginController@callback');
 
 });
 //个人中心页面
