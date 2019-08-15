@@ -14,7 +14,7 @@
     <h3 class="righttit" style="padding-left:50px;">优秀讲师</h3>
     @foreach($teacherInfo as $v)
 
-	<h3 class="righttit" style="padding-left:50px;">优秀讲师<a href="{{url('http://teacher.com/apply')}}/{{$user_id}}" style="margin:830px">申请成为讲师</a></h3>
+	<h3 class="righttit" style="padding-left:50px;">优秀讲师</h3>
 
 	<div class="coursepic tecti">
 		<div class="teaimg">

@@ -62,16 +62,18 @@ function nTabs(thisObj,Num){
         </span>-->
 
         <!--未登录-->
+            @if(session('user_id')==null)
                 <span class="exambtn_lore">
                  <a class="tkbtn tklog" href="/login">登录</a>
                  <a class="tkbtn tkreg" href="/register">注册</a>
                 </span>
+            @else
             <!--登录后-->
-            <!--<div class="logined">
-                <a href="mycourse.html"  onMouseOver="logmine()" style="width:70px" class="link2 he ico" target="_blank">sherley</a>
+                <div class="logined">
+                <a href="mycourse.html"  onMouseOver="logmine()" style="width:70px" class="link2 he ico" target="_blank">{{$user_name}}</a>
                 <span id="lne" style="display:none" onMouseOut="logclose()" onMouseOver="logmine()">
                     <span style="background:#fff;">
-                        <a href="mycourse.html" style="width:70px; display:block;" class="link2 he ico" target="_blank">sherley</a>
+                        <a href="mycourse.html" style="width:70px; display:block;" class="link2 he ico" target="_blank">{{$user_name}}</a>
                     </span>
                     <div class="clearh"></div>
                     <ul class="logmine" >
@@ -81,7 +83,9 @@ function nTabs(thisObj,Num){
                         <li><a class="link1" href="#">退出</a></li>
                     </ul>
                 </span>
-            </div>-->
+            </div>
+            @endif
+
             
             
             

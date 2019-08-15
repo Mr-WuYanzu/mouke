@@ -27,7 +27,7 @@
 		<p class="courstime">课程评价：<img width="71" height="14" src="images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
         <!--<p><a class="state end">完结</a></p>-->      
         <span class="coursebtn">
-            <a class="btnlink" href="/curr/chapterlist">加入学习</a>
+            <a class="btnlink" href="/curr/chapterlist/{{$currInfo['curr_id']}}">加入学习</a>
             <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
             <a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
         </span>
