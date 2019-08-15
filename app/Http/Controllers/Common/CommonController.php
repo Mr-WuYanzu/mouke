@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Common;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 /**
@@ -63,5 +64,12 @@ class CommonController extends Controller
     		'skin'=>$skin
     	];
     	return json_encode($arr,JSON_UNESCAPED_UNICODE);
+    }
+
+    //查找用户信息
+    public function getUserInfo(){
+       $user_id = session('user_id');
+       $userInfo =  \App\user\User::where(['user_id'=>$user_id])->first();
+       return $userInfo;
     }
 }

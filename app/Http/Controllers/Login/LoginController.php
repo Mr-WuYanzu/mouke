@@ -49,7 +49,7 @@ class LoginController extends Controller
 		}
 		unset($data['pwd1']);
 		unset($data['_token']);
-		$user_pwd = \encrypt($pwd);
+		$user_pwd = encrypt($pwd);
 		$data['pwd'] = $user_pwd;
 		$res = UserModel::insert($data);
 		if($res){
@@ -97,6 +97,7 @@ class LoginController extends Controller
 		$user_info = $data['user_info'];
 		$login_pwd = $data['pwd'];
 		$info = preg_match($reg,$user_info);
+
 		if($info){
 			$result = UserModel::where(['user_mail'=>$user_info])->first();
 			$pwd = $result['pwd'];

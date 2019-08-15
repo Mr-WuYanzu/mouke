@@ -42,8 +42,10 @@ class CurrController extends CommonController
         //查询分类
         $curr_cate = CurrCate::get();
         $curr_cate_info=$this->curr_cate($curr_cate);
+        //用户信息
+        $userInfo=$this->getUserInfo();
 //        dd($curr_cate_info);
-    	return view('curr/currlist',['currInfo'=>$currInfo,'curr_cate_info'=>$curr_cate_info]);
+    	return view('curr/currlist',['currInfo'=>$currInfo,'curr_cate_info'=>$curr_cate_info,'user_id'=>$userInfo['user_id']??'','user_name'=>$userInfo['user_name']??'']);
     }
 
     //课程分类搜索
@@ -206,9 +208,6 @@ class CurrController extends CommonController
         //根据课时id查询课时
         $classInfo = CurrClassHourModel::where(['class_id'=>$class_id])->first();
         if($classInfo){
-            if($classInfo['class_type']==1){
-                return ['status'=>201,'msg'=>'ok','live_url'=>$classInfo['class_data']];
-            }else{
                 //判断视频类型
                 $video_type='';
                 if(!empty($classInfo['class_data'])){
@@ -227,7 +226,6 @@ class CurrController extends CommonController
                     }
                 }
                 return ['status'=>200,'msg'=>'ok','video_url'=>$classInfo['class_data'],'video_type'=>$video_type];
-            }
         }else{
             return ['status'=>107,'msg'=>'课时不存在'];
         }
