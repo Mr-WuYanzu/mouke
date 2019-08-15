@@ -17,14 +17,14 @@
 <div>
     <p class="formrow">
     <label class="control-label" for="register_email">帐号</label>
-    <input type="text" name="user_info">
+    <input type="text" name="user_info" style="margin-top:25px;">
     </p>
     <span class="text-danger">请输入Email地址 / 用户昵称</span>
 </div>
 <div>
     <p class="formrow">
     <label class="control-label" for="register_email">密码</label>
-    <input type="password" name="pwd">
+    <input type="password" name="pwd" style="margin-top:25px;">
     </p>
     <p class="help-block"><span class="text-danger">密码错误</span></p>
 </div>
