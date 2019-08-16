@@ -20,7 +20,7 @@
       <a href="#" class="sellink"></a>
     </span>
     <ul class="courseul">
-    <li class="curr" style="border-radius:3px 3px 0 0;background:#fb5e55;"><h3 style="color:#fff;"><a href="#" class="whitea">全部课程</a></h3>
+    <li class="curr" style="border-radius:3px 3px 0 0;background:#fb5e55;"><h3 style="color:#fff;"><a href="#" class="whitea" onclick="history.go(0)">全部课程</a></h3>
         @foreach($curr_cate_info as $k=>$v)
             <li>
                 <h4><span style="cursor: pointer" class="cate" cate_id="{{$v['curr_cate_id']}}">{{$v['cate_name']}}</span></h4>
@@ -82,7 +82,7 @@
                     data+='<li>' +
                         '<div class="courselist">' +
                         '<a href="/curr/currcont/'+res[index].curr_id+'" target="_blank">' +
-                        '<img style="border-radius:3px 3px 0 0;" width="240" src="/images/c1.jpg" title="会计基础">' +
+                        '<img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/'+res[index].curr_img+'" title="会计基础">' +
                         '</a>' +
                         '<p class="courTit"><a href="coursecont.html" target="_blank">'+res[index].curr_name+'</a></p><div class="gray">'+
                         '<span>'+res[index].classNum+'课时</span>'+
@@ -114,7 +114,7 @@
                     data+='<li>' +
                         '<div class="courselist">' +
                         '<a href="/curr/currcont/'+res[index].curr_id+'" target="_blank">' +
-                        '<img style="border-radius:3px 3px 0 0;" width="240" src="/images/c1.jpg" title="会计基础">' +
+                        '<img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/'+res[index].curr_img+'" title="会计基础">' +
                         '</a>' +
                         '<p class="courTit"><a href="coursecont.html" target="_blank">'+res[index].curr_name+'</a></p><div class="gray">'+
                         '<span>'+res[index].classNum+'课时</span>'+

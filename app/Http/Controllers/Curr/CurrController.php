@@ -187,8 +187,22 @@ class CurrController extends CommonController
         $commentModel=new CurrCommentModel();
         //查询该课程下所有评论信息
         $commentInfo=$commentModel->where('curr_id',$curr_id)->orderBy('create_time','desc')->get();
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
     	//渲染模版
-    	return view('curr/chapterlist',['commentInfo'=>$commentInfo,'currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapterInfo'=>$chapterInfo,'relevant_curr'=>$Relevant_curr]);
+    	return view('curr/chapterlist',
+            [
+                'commentInfo'=>$commentInfo,
+                'currInfo'=>$currInfo,
+                'teacherInfo'=>$teacherInfo,
+                'chapterInfo'=>$chapterInfo,
+                'relevant_curr'=>$Relevant_curr,
+                'userInfo'=>$userInfo
+            ]
+        );
     }
 
     //查找相关课程

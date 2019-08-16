@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Http\Controllers\Common\CommonController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\TeacherModel;
@@ -15,7 +16,7 @@ use App\Model\CurrClassHourModel;
  * @package  App\Http\Controllers\Teacher
  * @date 2019-08-08
  */
-class TeacherController extends Controller
+class TeacherController extends CommonController
 {
 	/**
 	 * [讲师列表]
@@ -30,11 +31,13 @@ class TeacherController extends Controller
         //查询所有通过审核的讲师信息
         $teacherInfo=$teacherModel->where('status',2)->orderBy('t_good','desc')->get()->toArray();
 
-
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
         //渲染视图
-        $user_id = session('user_id');
-        // dd($user_id);
-    	return view('teacher/teacherlist',['user_id'=>$user_id,'teacherInfo'=>$teacherInfo]);
+    	return view('teacher/teacherlist',['userInfo'=>$userInfo,'teacherInfo'=>$teacherInfo]);
 
     }
 
@@ -64,7 +67,12 @@ class TeacherController extends Controller
                 $currInfo[$k]['total_class_hour']+=$count;
             }
         }
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
     	//渲染视图
-    	return view('teacher/teachercont',compact('teacherInfo','currInfo'));
+    	return view('teacher/teachercont',compact('teacherInfo','currInfo','userInfo'));
     }
 }

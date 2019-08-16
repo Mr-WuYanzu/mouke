@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Article;
 
+use App\Http\Controllers\Common\CommonController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -12,7 +13,7 @@ use DB;
  * @package  App\Http\Controllers\Article
  * @date 2019-08-08
  */
-class ArticleController extends Controller
+class ArticleController extends CommonController
 {
 	/**
 	 * [资讯列表]
@@ -30,8 +31,13 @@ class ArticleController extends Controller
         }
         //热门资讯
         $hot=DB::table('infomation')->where(['info_hot'=>2])->get();
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
     	//渲染视图
-    	return view('article/articlelist',compact('cate_Info','Info','hot'));
+    	return view('article/articlelist',['cate_Info'=>$cate_Info,'Info'=>$Info,'hot'=>$hot,'userInfo'=>$userInfo]);
     }
 
     /**
@@ -47,8 +53,13 @@ class ArticleController extends Controller
         $info_name=DB::table('information_cate')->where(['info_cate_id'=>$Info->info_cate_id])->value('info_name');
         //热门资讯
         $hot=DB::table('infomation')->where(['info_hot'=>2])->get();
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
     	//渲染视图
-    	return view('article/articlecont',compact('Info','info_name','hot'));
+    	return view('article/articlecont',['info_name'=>$info_name,'Info'=>$Info,'hot'=>$hot,'userInfo'=>$userInfo]);
     }
 
     /*

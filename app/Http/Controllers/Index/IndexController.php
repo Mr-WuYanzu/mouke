@@ -23,8 +23,6 @@ class IndexController extends CommonController
      */
     public function index(Request $request)
     {
-    	//渲染视图
-        $userInfo = $this->getUserInfo();
         //实例化模型类
         $currCateModel=new CurrCateModel();
         $currModel=new CurrModel();
@@ -46,10 +44,15 @@ class IndexController extends CommonController
         $currInfo=$currModel->where('is_show',1)->where('curr_status',1)->where('curr_good',2)->whereIn('curr_cate_id',$curr_cate_id)->get()->toArray();
         // var_dump($currInfo);
         // die;
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
         if(empty($userInfo)){
             return view('index/index',compact('cate','currInfo'));
         }else {
-            return view('index/index', ['user_id' => $userInfo['user_id'], 'user_name' => $userInfo['user_name'],'cate'=>$cate,'currInfo'=>$currInfo]);
+            return view('index/index', ['userInfo'=>$userInfo,'cate'=>$cate,'currInfo'=>$currInfo]);
         }
     }
 
