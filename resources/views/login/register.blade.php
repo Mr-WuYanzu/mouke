@@ -23,8 +23,9 @@
         <p class="formrow">
             <label class="control-label" for="register_email">邮箱地址</label>
             <input type="text" name='user_mail'>
-            <span class="text-danger">请输入邮箱地址</span>
+            <button type="button" class="uploadbtn" id="code">获取验证码</button>
         </p>
+        <input type="text" name='code'>
     </div>
 
     <div>
@@ -71,48 +72,91 @@
 <script src="/layui/css/layui.css"></script>
 <script>
 
-$(function(){
-    layui.use(['layer'],function(){
+$(function() {
+    layui.use(['layer'], function () {
         var layer = layui.layer;
 
-            $("input[name='user_mail']").blur(function(){
-                var user_mail = $(this).val();
-                var reg_mail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
-                $.post(
-                    '/checkmail',
-                    {user_mail:user_mail},
-                    function (res) {
-                        // console.log(res);
-                        if(res.code==300){
-                            layer.msg(res.msg,{icon:7});
-                        }
+        $("input[name='user_mail']").blur(function () {
+            // alert(123123132);
+            var user_mail = $(this).val();
+            // console.log(user_mail);
+            var reg_mail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
+            $.post(
+                '/checkmail',
+                {user_mail: user_mail},
+                function (res) {
+                    // console.log(res);
+                    if (res == 1) {
+                        layer.msg('邮箱已存在！', {icon: 7});
                     }
-                )
-            })
-
-            //用户性验证
-            $("input[name='user_name']").blur(function(){
-                var user_name = $("input[name='user_name']").val();
-                var reg_name = /^[\u4e00-\u9fa5]{1,7}$|^[\dA-Za-z_]{1,14}$/;
-                if(user_name == ''){
-                    layer.msg('用户名必填',{icon:2});
-                    return false;
-                }else if(!reg.test(user_name)){
-                    layer.msg('请注意查看用户名规则',{icon:7});
-                    return false;
                 }
-            })
-                $.post(
-                    '/checkname',
-                    {user_name:user_name},
-                    function (res) {
-                        // console.log(res);
-                        if(res.code==300){
-                            layer.msg(res.msg,{icon:7});
-                        }
+            )
+        });
+
+        $("#code").click(function () {
+            var user_mail = $("input[name='user_mail']").val();
+            if(user_mail == ''){
+                layer.msg('邮箱必填',{icon:7});
+            }
+            // alert(user_mail);
+            $.post(
+                '/email',
+                {user_mail:user_mail},
+                function(res){
+                    // console.log(res)
+                    if(res.code == 1){
+                        layer.msg('res.msg',{icon:6});
+                    }else if(res.code==2){
+                        layer,msg('res.msg',{icon:7});
+                    }else if(res.code == 3){
+                        layer.msg('res.msg',{icon:7});
                     }
-                )
-            })
+                }
+            )
+        });
+
+        $("input[name='code']").blur(function () {
+            // alert(123123123);
+            var code = $(this).val();
+            if(code == ''){
+                layer.msg('验证码必填',{icon:7});
+            }
+            $.post(
+                '/checkcode',
+                {code:code},
+                function (res) {
+                    // console.log(res);
+                    if(res.code == 1){
+                        layer.msg('res.msg',{icon:6});
+                    }else if(res.code==2){
+                        layer,msg('res.msg',{icon:7});
+                    }
+                }
+            )
+        })
+
+        //用户性验证
+        $("input[name='user_name']").blur(function () {
+            var user_name = $("input[name='user_name']").val();
+            var reg_name = /^[\u4e00-\u9fa5]{1,7}$|^[\dA-Za-z_]{1,14}$/;
+            if (user_name == '') {
+                layer.msg('用户名必填', {icon: 2});
+                return false;
+            } else if (!reg.test(user_name)) {
+                layer.msg('请注意查看用户名规则', {icon: 7});
+                return false;
+            }
+            $.post(
+                '/checkname',
+                {user_name: user_name},
+                function (res) {
+                    // console.log(res);
+                    if (res.code == 300) {
+                        layer.msg(res.msg, {icon: 7});
+                    }
+                }
+            )
+        });
         /*
             //密码验证
             $("input[name='pwd']").blur(function(){
@@ -146,7 +190,7 @@ $(function(){
             
             })
         */
-        $("#btn").click(function(){
+        $("#btn").click(function () {
             var _token = $("#_token").val();
             var user_mail = $("input[name='user_mail']").val();
             var reg_mail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
@@ -154,70 +198,70 @@ $(function(){
             var reg_name = /^[\u4e00-\u9fa5]{1,7}$|^[\dA-Za-z_]{1,14}$/;
             var pwd = $("input[name='pwd']").val();
             var reg_pwd = /^[\dA-Za-z_]{5,20}$/;
-            var pwd1 = $("input[name='pwd1']").val();
+            var pwd1 = $("input[name='pwd1']").   val();
 
-            if(user_mail == ''){
-                layer.msg('邮箱必填',{icon:2});
+            if (user_mail == '') {
+                layer.msg('邮箱必填', {icon: 2});
                 return false;
-            }else if(!reg_mail.test(user_mail)){
-                layer.msg('您的邮箱格式不正确',{icon:2});
+            } else if (!reg_mail.test(user_mail)) {
+                layer.msg('您的邮箱格式不正确', {icon: 2});
                 return false;
             }
 
-            if(user_name == ''){
-                layer.msg('用户名必填',{icon:2});
+            if (user_name == '') {
+                layer.msg('用户名必填', {icon: 2});
                 return false;
-            }else if(!reg_name.test(user_name)){
-                layer.msg('请注意查看用户名规则',{icon:7});
+            } else if (!reg_name.test(user_name)) {
+                layer.msg('请注意查看用户名规则', {icon: 7});
                 return false;
             }
 
-            if(pwd == ''){
-                layer.msg('密码必填',{icon:7});
+            if (pwd == '') {
+                layer.msg('密码必填', {icon: 7});
                 return false;
-            }else if(!reg_pwd.test(pwd)){
-                layer.msg('请注意查看密码规则',{icon:7});
+            } else if (!reg_pwd.test(pwd)) {
+                layer.msg('请注意查看密码规则', {icon: 7});
                 return false;
-                
-            }        
 
-            if(pwd1 == ''){
-                layer.msg('确认密码必填',{icon:7});
+            }
+
+            if (pwd1 == '') {
+                layer.msg('确认密码必填', {icon: 7});
                 return false;
-            }else if(!reg_pwd.test(pwd)){
-                layer.msg('请注意查看密码规则',{icon:7});
+            } else if (!reg_pwd.test(pwd)) {
+                layer.msg('请注意查看密码规则', {icon: 7});
                 return false;
-            }else if(pwd1 != pwd){
-                layer.msg('两次密码不一致！',{icon:2});
+            } else if (pwd1 != pwd) {
+                layer.msg('两次密码不一致！', {icon: 2});
                 return false;
             }
 
 
             $.post(
                 '/registerdo',
-                {user_mail:user_mail,user_name:user_name,pwd:pwd,pwd1:pwd1,_token:_token},
-                function(res){
-                    if(res == 1){
-                        layer.msg('注册成功，即将跳转登陆页面',{icon:6},function(){
-                            location.href="{{url('/login')}}";
+                {user_mail: user_mail, user_name: user_name, pwd: pwd, pwd1: pwd1, _token: _token},
+                function (res) {
+                    if (res == 1) {
+                        layer.msg('注册成功，即将跳转登陆页面', {icon: 6}, function () {
+                            location.href = "{{url('/login')}}";
                         });
-                    }else if(res == 2){
-                        layer.msg('注册失败',{icon:2});
-                    }else if(res == 3){
-                        layer.msg('两次密码不一致！',{icon:7});
+                    } else if (res == 2) {
+                        layer.msg('注册失败', {icon: 2});
+                    } else if (res == 3) {
+                        layer.msg('两次密码不一致！', {icon: 7});
                     }
                 }
             )
-        
-        })
-        return false;
-    })
+            return false;
+        });
 
-    function check(){
-        // 验证表单数据是否符合条件，不符合返回false禁止提交
-        return false;
-    }
-   
+
+        function check() {
+            // 验证表单数据是否符合条件，不符合返回false禁止提交
+            return false;
+        }
+
+    })
 })
 
 </script>
