@@ -13,7 +13,8 @@ use App\Model\CurrCommentModel;
 use App\Model\CurrCollectModel;
 use Illuminate\Support\Facades\Redis;
 use mysql_xdevapi\Collection;
-use DB;
+use Illuminate\Support\Facades\DB;
+
 /**
  * 课程模块类
  * class CurrController
