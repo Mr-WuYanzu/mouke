@@ -4,6 +4,7 @@
 
 @section('content')
 <link rel="stylesheet" href="{{asset('css/course.css')}}"/>
+<link rel="stylesheet" href="{{asset('layui/css/layui.css')}}"/>
 <script src="{{asset('js/jquery.tabs.js')}}"></script>
 <script src="{{asset('js/mine.js')}}"></script>
 
@@ -27,21 +28,25 @@
 		<p class="courstime">课程评价：<img width="71" height="14" src="images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
         <!--<p><a class="state end">完结</a></p>-->      
         <span class="coursebtn">
-            <a class="btnlink" href="/curr/chapterlist/{{$currInfo['curr_id']}}">加入学习</a>
-            <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
-            <a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
-        </span>
-            <span class="exambtn_lore">
-                <a class="tkbtn tklog" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
-            </span>
-        </span>
+            <a class="btnlink" href="/curr/chapterlist/{{$currInfo['curr_id']}}">加入学习</a>&nbsp;&nbsp;&nbsp;
 
-		<div style="clear:both;"></div>
+            @if($collect_status == '')
+                <a class="layui-btn layui-btn-normal" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
+            @elseif($collect_status == 1)
+                <a class="layui-btn layui-btn-normal" href="javascript:;" id="btn_no" curr_id = "{{$currInfo['curr_id']}}">取消收藏</a>
+            @elseif($collect_status == 2)
+                <a class="layui-btn layui-btn-normal" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
+            @endif
+
+            <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
+            <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
+        </span>
+		<div style="clear:both;"> </div>
 		<div id="bds">
             <div class="bdsharebuttonbox">
-				<a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a>
+				<a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone" id="zone"></a>
 				<a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
-				<a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+				<a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq" id="blog"></a>
 				<a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
 				<a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
 				<a href="#" class="bds_more" data-cmd="more"></a>
@@ -138,62 +143,138 @@
 <div class="clearh"></div>
 <script>
     $(function(){
-        //点击订阅
-        $(document).on('click','#subscribe',function(){
-            //获取课程id
-            var curr_id=$(this).attr('curr_id');
-            $.post(
-                "/course/subscribe",
-                {curr_id:curr_id},
-                function(res){
-                    // console.log(res);
-                    if(res.code == 100){
-                        alert(res.msg);
-                    }else if(res.code == 2){
-                        alert(res.msg);
-                        location.href='/login';
-                    }else{
-                        alert(res.msg);
-                    }
-                }
-                ,'json '
-            )
-        })
-    })
-</script>
-
-
-
-
-
-@endsection
-<script src="/js/jquery-3.2.1.min.js"></script>
-<script src="/layui/layui.js"></script>
-<script src="/layui/css/layui.css"></script>
-<script>
-    $(function(){
-        layui.use(['layer'],function(){
+        layui.use(['layer'],function() {
             var layer = layui.layer;
+            //点击订阅
+            $(document).on('click', '#subscribe', function () {
+                //获取课程id
+                var curr_id = $(this).attr('curr_id');
+                $.post(
+                    "/course/subscribe",
+                    {curr_id: curr_id},
+                    function (res) {
+                        // console.log(res);
+                        layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                            if (res.code == 1) {
 
+                            }else if(res.code == 2) {
+                                location.href='/login';
+                            }
+                        });
+
+                    }
+                    , 'json '
+                )
+            })
+            //点击收藏
             $("#btn").click(function(){
                 var curr_id = $(this).attr('curr_id');
                 $.post(
                     '/curr/collectdo',
                     {curr_id:curr_id},
                     function(res){
-                        console.log(res);
-                        var code = res.code;
-                        if(code == 200){
-                            layer.msg(res.msg,{icon:6});
+                        // console.log(res);
+                        if(res.code == 1){
+                            layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                                history.go(0);
+                            });
+                        }else if(res.code == 2){
+                            layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                                location.href='/login';
+                            });
+                        }
+                    }
+                )
+
+            })
+            //取消收藏
+            $("#btn_no").click(function(){
+                var curr_id = $(this).attr('curr_id');
+                $.post(
+                    '/curr/collectdo_no',
+                    {curr_id:curr_id},
+                    function(res){
+                        // console.log(res);
+                        if(res.code == 1){
+                            layer.msg(res.msg,{icon:res.code,time:2000});
+                            history.go(0);
+                        }else if(res.code == 2){
+                            layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                                location.href='/login';
+                            });
                         }else{
-                            layer.msg(res.msg,{icon:2});
+                            layer.msg(res.msg,{icon:res.code,time:2000});
                         }
                     }
                 )
 
             })
 
+
+            //分享到新浪微博
+            $('#blog').click(function(){
+                window.sharetitle = '<%$info.title%>';//标题
+                window.shareUrl = '__IMG__<%$info.img.0.url%>';//缩略图
+                share();
+            });
+            //分享到微博
+            function share(){
+                //d指的是window
+                (function(s,d,e){try{}catch(e){}var f='http://v.t.sina.com.cn/share/share.php?',
+                    u=d.location.href,
+                    p=['url=',
+                    e(u),
+                    '&title=',
+                    e(window.sharetitle),
+                    '&appkey=2924220432',
+                    '&pic=',
+                    e(window.shareUrl)].join('');
+                    function a(){if(!window.open([f,p].join(''),
+                        'mb',
+                        [
+                        'toolbar=0,' +
+                        'status=0,' +
+                        'resizable=1,' +
+                        'width=620,' +
+                        'height=450,' +
+                        'left=',
+                        (s.width-620)/2,
+                        ',top=',
+                        (s.height-450)/2].join('')))u.href=[f,p].join('');
+                    };
+                    if(/Firefox/.test(navigator.userAgent)){
+                        setTimeout(a,0)
+                    }else{
+                        a()
+                    }
+                })
+                (screen,document,encodeURIComponent);
+            }
+
+            //分享到QQ空间
+            $("#zone").click(function(){
+                var p = {
+                    url:location.href,
+                    showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
+                    desc:'',/*默认分享理由(可选)*/
+                    summary:'我在【空间家】上找到一个好位置，地段好又划算，快来看看吧！',/*分享摘要(可选)*/
+                    title:'<%$info.title%>',/*分享标题(可选)*/
+                    site:'空间家',/*分享来源 如：腾讯网(可选)*/
+                    pics:'__IMG__<%$info.img.0.url%>', /*分享图片的路径(可选)*/
+                    style:'203',
+                    width:98,
+                    height:22
+                };
+                var s = [];
+                for(var i in p){
+                    s.push(i + '=' + encodeURIComponent(p[i]||''));
+                }
+                window.open("http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?"+s.join('&'));
+            });
+
+
+
         })
     })
-
 </script>
+@endsection
