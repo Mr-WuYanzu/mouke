@@ -44,8 +44,11 @@ class CurrController extends CommonController
         $curr_cate_info=$this->curr_cate($curr_cate);
         //用户信息
         $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
 //        dd($curr_cate_info);
-    	return view('curr/currlist',['currInfo'=>$currInfo,'curr_cate_info'=>$curr_cate_info,'user_id'=>$userInfo['user_id']??'','user_name'=>$userInfo['user_name']??'']);
+    	return view('curr/currlist',['currInfo'=>$currInfo,'curr_cate_info'=>$curr_cate_info,'userInfo'=>$userInfo]);
     }
 
     //课程分类搜索
@@ -135,16 +138,20 @@ class CurrController extends CommonController
         }else{
             $collect_status='';
         }
-    	//渲染模版
-    	return view('curr/currcont',[
-    	    'currInfo'=>$currInfo,
-            'teacherInfo'=>$teacherInfo,
-            'chapter'=>$chapter,
-            'collect_status'=>$collect_status
-        ]);
-
+        //用户信息
+        $userInfo=$this->getUserInfo();
+        if(isset($userInfo['pwd'])){
+            unset($userInfo['pwd']);
+        }
         //渲染模版
-        return view('curr/currcont',['currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapter'=>$chapter]);
+        return view('curr/currcont',
+                ['currInfo'=>$currInfo,
+                    'teacherInfo'=>$teacherInfo,
+                    'chapter'=>$chapter,
+                    'collect_status'=>$collect_status,
+                    'userInfo'=>$userInfo
+                ]
+            );
 
     }
 
@@ -313,7 +320,7 @@ class CurrController extends CommonController
     public function collectdo(Request $request)
     {
         #接受 课程id
-        $curr_id = $request->curr_id;
+        $curr_id = $request->post('curr_id');
         #获取用户id
         $user_id = session('user_id');
 //        $user_id=8;

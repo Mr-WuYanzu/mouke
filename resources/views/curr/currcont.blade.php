@@ -25,7 +25,7 @@
 		<p class="courstime">课程时长：<span class="course_tt">不详</span></p>
         <p class="courstime">学习人数：<span class="course_tt">{{$currInfo['study_num']}}人</span></p>
 		<p class="courstime">讲师：{{$teacherInfo['t_name']}}</p>
-		<p class="courstime">课程评价：<img width="71" height="14" src="images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
+		<p class="courstime">课程评价：<img width="71" height="14" src="/images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
         <!--<p><a class="state end">完结</a></p>-->      
         <span class="coursebtn">
             @if($currInfo['curr_type']==1)
@@ -180,17 +180,18 @@
                 )
             })
             //点击收藏
-            $("#btn").click(function(){
+            $(document).on('click','#btn',function () {
                 var curr_id = $(this).attr('curr_id');
+                var _save = $(this);
                 $.post(
                     '/curr/collectdo',
                     {curr_id:curr_id},
                     function(res){
                         // console.log(res);
                         if(res.code == 1){
-                            layer.msg(res.msg,{icon:res.code,time:2000},function(){
-                                history.go(0);
-                            });
+                            layer.msg(res.msg,{icon:res.code,time:2000});
+                                _save.text('取消收藏');
+                                _save.prop('id','btn_no');
                         }else if(res.code == 2){
                             layer.msg(res.msg,{icon:res.code,time:2000},function(){
                                 location.href='/login';
@@ -201,8 +202,9 @@
 
             })
             //取消收藏
-            $("#btn_no").click(function(){
+            $(document).on('click','#btn_no',function () {
                 var curr_id = $(this).attr('curr_id');
+                var _save = $(this);
                 $.post(
                     '/curr/collectdo_no',
                     {curr_id:curr_id},
@@ -210,7 +212,8 @@
                         // console.log(res);
                         if(res.code == 1){
                             layer.msg(res.msg,{icon:res.code,time:2000});
-                            history.go(0);
+                            _save.text('收藏课程');
+                            _save.prop('id','btn');
                         }else if(res.code == 2){
                             layer.msg(res.msg,{icon:res.code,time:2000},function(){
                                 location.href='/login';
