@@ -10,7 +10,7 @@
 <!-- InstanceBeginEditable name="EditRegion1" -->
 <div class="coursecont">
 <div class="coursepic">
-	<div class="course_img"><img src="images/c1.jpg" width="500"></div>
+	<div class="course_img"><img src="http://curr.img.com/{{$currInfo['curr_img']}}" width="500"></div>
     <div class="coursetitle">
    		<a class="state">
             @if($currInfo['status']==1)
@@ -20,14 +20,22 @@
             @endif
         </a>
     	<h2 class="courseh2">{{$currInfo['curr_name']}}</h2>
-        <p class="courstime">总课时：<span class="course_tt">{{$currInfo['classNum']}}课时</span></p>
+        <p class="courstime">总课时：<span class="course_tt">{{$currInfo['classNum']??'直播'}}课时</span></p>
 		<p class="courstime">课程时长：<span class="course_tt">不详</span></p>
         <p class="courstime">学习人数：<span class="course_tt">{{$currInfo['study_num']}}人</span></p>
 		<p class="courstime">讲师：{{$teacherInfo['t_name']}}</p>
 		<p class="courstime">课程评价：<img width="71" height="14" src="images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
         <!--<p><a class="state end">完结</a></p>-->      
         <span class="coursebtn">
-            <a class="btnlink" href="/curr/chapterlist/{{$currInfo['curr_id']}}">加入学习</a>
+            @if($currInfo['curr_type']==1)
+                @if($currInfo['live_status']==2)
+                    <a class="btnlink" href="http://zhibo.mk.com/curr?curr_id={{$currInfo['curr_id']}}&t_id={{$teacherInfo['t_id']}}">观看直播</a>
+                @else
+                    <a class="btnlink" href="JavaScript:;">还未开播</a>
+                @endif
+            @else
+                <a class="btnlink" href="/curr/chapterlist/{{$currInfo['curr_id']}}">加入学习</a>
+            @endif
             <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
             <a class="codol sc" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
         </span>
@@ -56,6 +64,7 @@
 </div>
 
 <div class="clearh"></div>
+
 <div class="coursetext">
 	<h3 class="leftit">课程简介</h3>
     <p class="coutex">{{$currInfo['curr_detail']}}</p>
@@ -71,17 +80,18 @@
     </dl>
 </div>
 
+
 <div class="courightext">
 <div class="ctext">
     <div class="cr1">
     <h3 class="righttit">授课讲师</h3>
     <div class="teacher">
     <div class="teapic ppi">
-    <a href="teacher.html" target="_blank"><img src="images/teacher.png" width="80" class="teapicy" title="张民智"></a>
-    <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">张民智</a><p style="font-size:14px;color:#666">会计讲师</p></h3>
+    <a href="teacher.html" target="_blank"><img src="http://curr.img.com/{{$teacherInfo['header_img']}}" width="80" class="teapicy" title="{{$teacherInfo['t_name']}}"></a>
+    <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a><p style="font-size:14px;color:#666">{{$teacherInfo['teacher_direction']}}</p></h3>
     </div>
     <div class="clearh"></div>
-    <p>十年以上Linux从业经验， 培训经验超过八年。在各 个知名培训机构做过金牌 讲师、学科负责人，培训 学员过万人。曾获红帽认 证讲师，微软认证讲师等 资质认证。教学以逻辑性 强、教学细致、知识点准 确著称。</p>
+    <p>{{$teacherInfo['t_desc']}}</p>
     </div>
     </div>
 </div>

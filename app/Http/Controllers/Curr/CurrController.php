@@ -106,20 +106,26 @@ class CurrController extends CommonController
         $curr_id = intval($curr_id);
         //根据课程id查询课程详情
         $currInfo = CurrModel::where(['curr_id'=>$curr_id])->first();
-        //获取课时个数
-        foreach ($currInfo as $k=>$v){
-            $currInfo['classNum']=0;
-            $chapterInfo = CurrChapterModel::where(['curr_id'=>$curr_id])->get();
-            foreach ($chapterInfo as $key=>$val){
-                $currInfo['classNum']+=$val['class_num'];
+        $chapter=[];
+        if($currInfo['curr_type']==2){
+            //获取课时个数
+            foreach ($currInfo as $k=>$v){
+                $currInfo['classNum']=0;
+                $chapterInfo = CurrChapterModel::where(['curr_id'=>$curr_id])->get();
+                foreach ($chapterInfo as $key=>$val){
+                    $currInfo['classNum']+=$val['class_num'];
+                }
             }
+            //查询讲师
+            $teacherInfo = TeacherModel::where(['t_id'=>$currInfo['t_id']])->first();
+            //查询课程章节
+            $chapter = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
+        }else{
+            //查询讲师
+            $teacherInfo = TeacherModel::where(['t_id'=>$currInfo['t_id']])->first();
         }
-        //查询讲师
-        $teacherInfo = TeacherModel::where(['t_id'=>$currInfo['t_id']])->first();
-        //查询课程章节
-        $chapter = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
-    	//渲染模版
-    	return view('curr/currcont',['currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapter'=>$chapter]);
+        //渲染模版
+        return view('curr/currcont',['currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapter'=>$chapter]);
     }
 
     /**
@@ -202,30 +208,33 @@ class CurrController extends CommonController
 
     //获取点击课时的视频
     public function getVideo(Request $request){
-        $teacher_id = 2;
-
         $class_id = $request->post('class_id');
         //根据课时id查询课时
         $classInfo = CurrClassHourModel::where(['class_id'=>$class_id])->first();
         if($classInfo){
                 //判断视频类型
                 $video_type='';
-                if(!empty($classInfo['class_data'])){
-                    $a = substr($classInfo['class_data'],-9);
-                    $b = explode('.',$a);
-                    switch ($b[1]??''){
-                        case 'mp4':
-                            $video_type=$b[1];
-                            break;
-                        case 'webm':
-                            $video_type=$b[1];
-                            break;
-                        case 'ogv':
-                            $video_type=$b[1];
-                            break;
+                if($classInfo['video_status']==1){
+                    if(!empty($classInfo['class_data'])){
+                        $a = substr($classInfo['class_data'],-9);
+                        $b = explode('.',$a);
+                        switch ($b[1]??''){
+                            case 'mp4':
+                                $video_type=$b[1];
+                                break;
+                            case 'webm':
+                                $video_type=$b[1];
+                                break;
+                            case 'ogv':
+                                $video_type=$b[1];
+                                break;
+                        }
                     }
+                    return ['status'=>200,'msg'=>'ok','video_url'=>$classInfo['class_data'],'video_type'=>$video_type];
                 }
-                return ['status'=>200,'msg'=>'ok','video_url'=>$classInfo['class_data'],'video_type'=>$video_type];
+            return ['status'=>201,'msg'=>'video faild'];
+
+
         }else{
             return ['status'=>107,'msg'=>'课时不存在'];
         }
