@@ -23,6 +23,8 @@ Route::prefix('/')->group(function(){
 	Route::get('curr/currlist','Curr\CurrController@currList');
 	//课程收藏
 	Route::post('curr/collectdo','Curr\CurrController@collectdo');
+	#取消收藏
+    Route::post('curr/collectdo_no','Curr\CurrController@collectdo_no');
     //课程分类搜索
     Route::post('cateSearch','Curr\CurrController@cateSearch');
 	//课程详情

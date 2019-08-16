@@ -118,8 +118,25 @@ class CurrController extends CommonController
         $teacherInfo = TeacherModel::where(['t_id'=>$currInfo['t_id']])->first();
         //查询课程章节
         $chapter = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
+
+
+        #处理收藏样式
+        #获取用户ID
+        $user_id=session('user_id');
+//        $user_id=8;
+        if($user_id){
+            #查询收藏表中的数据
+            $collect_status=DB::table('curr_collect')->where(['user_id'=>$user_id,'curr_id'=>$curr_id,'status'=>1])->value('status');
+        }else{
+            $collect_status='';
+        }
     	//渲染模版
-    	return view('curr/currcont',['currInfo'=>$currInfo,'teacherInfo'=>$teacherInfo,'chapter'=>$chapter]);
+    	return view('curr/currcont',[
+    	    'currInfo'=>$currInfo,
+            'teacherInfo'=>$teacherInfo,
+            'chapter'=>$chapter,
+            'collect_status'=>$collect_status
+        ]);
     }
 
     /**
@@ -231,26 +248,6 @@ class CurrController extends CommonController
         }
     }
 
-    public function collectdo(Request $request)
-    {
-        $curr_id = $request->curr_id;
-        $user_id = session('user_id');
-        $time = time();
-        $data = [
-            'curr_id' => $curr_id,
-            'user_id' => $user_id,
-            'status' => 1,
-            'create_time' => $time
-        ];
-        $res = CurrCollectModel::insert($data);
-//        echo $res;die;
-        if ($res == 1) {
-            return ['code' => 200, 'msg' => '收藏成功'];
-        } else {
-            return ['code' => 400, 'msg' => '收藏失败'];
-        }
-//        echo $user_id;die;
-    }
     /**
      * [订阅课程]
      * @param Request $request
@@ -275,13 +272,13 @@ class CurrController extends CommonController
             #先查询用户是否已经订阅
             $select=DB::table('curr_order')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->first();
             if($select){
-                return ['code'=>1,'msg'=>'您已经订阅---》请勿重复订阅'];
+                return ['code'=>5,'msg'=>'您已经订阅---》请勿重复订阅'];
             }else{
                 $insert=DB::table('curr_order')->insert($arr);
                 if($insert){
-                    return ['code'=>100,'msg'=>'订阅成功'];
+                    return ['code'=>1,'msg'=>'订阅成功'];
                 }else{
-                    return ['code'=>1,'msg'=>'订阅失败请重试'];
+                    return ['code'=>5,'msg'=>'订阅失败请重试'];
                 }
             }
         }
@@ -294,6 +291,75 @@ class CurrController extends CommonController
     public function order_no($user_id){
         $rand=mt_rand(111111,999999).time().$user_id;
         return $rand;
+    }
+
+    /**
+     * [收藏课程]
+     * @param Request $request
+     * @return array
+     */
+    public function collectdo(Request $request)
+    {
+        #接受 课程id
+        $curr_id = $request->curr_id;
+        #获取用户id
+        $user_id = session('user_id');
+//        $user_id=8;
+        if(empty($user_id)){
+            return ['code' => 2, 'msg' => '请先登录'];
+        }else{
+            #先查询收藏表中 是否已经收藏该课程
+            $Info=CurrCollectModel::where(['user_id'=>$user_id,'curr_id'=>$curr_id,'status'=>2])->first();
+            if(empty($Info)){
+                #为空 走第一次添加
+                #组装数据
+                $data = [
+                    'curr_id' => $curr_id,
+                    'user_id' => $user_id,
+                    'create_time' =>time()
+                ];
+                #将数组 存入收藏表中
+                $res = CurrCollectModel::insert($data);
+                if ($res) {
+                    return ['code' => 1, 'msg' => '收藏成功'];
+                } else {
+                    return ['code' => 5, 'msg' => '收藏失败---》请重试'];
+                }
+            }else{
+                #不为空 证明是 已收藏状态
+                $res=CurrCollectModel::where(['user_id'=>$user_id,'curr_id'=>$curr_id])->update(['status'=>1,'update_time'=>time()]);
+                if ($res) {
+                    return ['code' => 1, 'msg' => '收藏成功'];
+                } else {
+                    return ['code' => 5, 'msg' => '收藏失败---》请重试'];
+                }
+            }
+        }
+    }
+
+    #取消收藏课程
+    public function collectdo_no(Request $request){
+        #接受 课程id
+        $curr_id = $request->curr_id;
+        #获取用户id
+        $user_id = session('user_id');
+//        $user_id=8;
+        if(empty($user_id)){
+            return ['code' => 2, 'msg' => '请先登录'];
+        }else {
+            #根据用户ID 和 课程id 修改收藏表的状态
+            $update = CurrCollectModel::where([
+                 'user_id'=>$user_id,
+                 'curr_id' =>$curr_id
+            ])->update(['status'=>2,'update_time'=>time()]);
+            if($update){
+                return ['code' => 1, 'msg' => '取消收藏成功'];
+            }else{
+                return ['code' => 5, 'msg' => '取消收藏失败--》请重试'];
+            }
+        }
+
+
     }
 
 }
