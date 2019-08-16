@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 //use App\Libs\SDK\SaeTClientV2;
 use App\Http\Controllers\Controller;
 use App\Model\UserModel;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 //use SaeTOAuthV2;
 /**
  * 登录模块
@@ -76,17 +78,69 @@ class LoginController extends Controller
 
 	}
 
+
+    //获取邮箱的验证码
+    public function email(Request $request){
+        //接收数据
+        $email=$request->user_mail;
+        $rand=rand(100000,999999);
+        $where1=[
+            'user_mail'=>$email
+        ];
+        $count=UserModel::where($where1)->first();
+        if($count==''){
+            if($email){
+                $res=Mail::send('login/lists',['content'=>$rand],function($message)use($email){
+                    $message->subject('欢迎注册谋课在线教育平台！');
+                    $res=$message->to($email);
+                });
+                $arr=[
+                    'time'=>time(),
+                    'email'=>$email,
+                    'rand'=>$rand
+                ];
+//                print_r($res);die;
+                if(!$res){
+                    Request()->session()->put('email', $arr);//再将值存入session中
+                    return ['msg'=>'发送成功','code'=>1];
+
+                }else{
+                    return ['msg'=>'发送失败','code'=>2];
+                }
+            }
+        }else{
+            return ['msg'=>'邮箱已存在','code'=>3];
+        }
+
+
+
+    }
+
+    //验证邮箱验证码是否正确
+    public function checkcode(Request $request)
+    {
+        $code = $request->code;
+//        echo $code;die;
+        $s_code = Request()->session()->get('email');
+        $s_code = $s_code['code'];
+        if($code != $s_code){
+            return ['code'=>1,'msg'=>'验证码有误，请重新输入！'];
+        }else{
+            return ['code'=>2,'msg'=>'成功'];
+        }
+    }
     /**
      * 邮箱唯一性验证
      */
     public function checkmail(Request $request)
     {
         $user_mail = $request->post('user_mail');
+//        print_r($user_mail);die;
         $res = UserModel::where(['user_mail'=>$user_mail])->first();
 //        print_r($res);die;
         if($res){
 //            echo 1111;die;
-            return ['code'=>300,'msg'=>'邮箱已存在！'];
+            echo 1;die;
         }
     }
     /**
@@ -242,7 +296,7 @@ class LoginController extends Controller
 
     public function callback(Request $request)
     {
-        header("Access-Control-Allow-Origin:*");
+//        header("Access-Control-Allow-Origin:*");
         set_time_limit(0);
         $code = $request->code;
 //        dd($code);die;
@@ -250,7 +304,6 @@ class LoginController extends Controller
         $url = "https://api.weibo.com/oauth2/access_token?client_id=2961575350&client_secret=c9e9aa201d9558c60ea12f85a898702e&grant_type=authorization_code&redirect_uri=http://education.com/callback&code=".$code;
         $data = $this->curl($url);
 //        dd($data);
-
 
         //获取微博登陆用户的信息
         $userInfo=json_decode($data,true);
@@ -275,23 +328,28 @@ class LoginController extends Controller
             echo '错误';die;
         }
         $user_name = $user['screen_name'];
+        $idstr = [
+            'idstr'=>$user['idstr']
+        ];
         $data = [
             'user_name'=>$user_name,
             'create_time'=>time()
         ];
-        $res = UserModel::insert($data);
-//        dd($res);
-        if($res){
-//            $this->success("登陆成功");
-//            echo "11111";die;
+        $result = UserModel::where(['user_name'=>$user_name])->first();
+
+        if($result){
             echo "<script>alert('登陆成功');location.href='/index'</script>";
         }else{
-//            $this->success("失败");
-//            echo "22222";die;
-            echo "<script>alert('登录失败，请重新登陆');location.href='/login'</script>";
+            $res = UserModel::insert($data);
+            if($res){
+                echo "<script>alert('登陆成功');location.href='/index'</script>";
+            }else{
+                echo "<script>alert('登录失败，请重新登陆');location.href='/login'</script>";
+            }
         }
 
-//        dd($user);
+
+
     }
 
     //失败提示

@@ -51,6 +51,10 @@ Route::prefix('/')->group(function(){
 	Route::get('register','Login\LoginController@register');
 	//注册邮箱唯一性验证
     Route::post('checkmail','Login\LoginController@checkmail');
+    //邮箱验证码
+    Route::post('email','Login\LoginController@email');
+    //验证邮箱验证码是否正确
+    Route::any('checkcode','Login\LoginController@checkcode');
     //用户名唯一性验证
     Route::post('checkname','Login\LoginController@checkname');
 	//注册执行页面
