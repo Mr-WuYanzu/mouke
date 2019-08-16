@@ -19,6 +19,8 @@
 Route::prefix('/')->group(function(){
 	//前台首页
 	Route::get('index','Index\IndexController@index');
+	//获取分类下的课程信息
+	Route::post('/getCurrInfo','Index\IndexController@getCurrInfo');
 	//课程列表
 	Route::get('curr/currlist','Curr\CurrController@currList');
 	//课程收藏
