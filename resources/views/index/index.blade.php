@@ -324,18 +324,18 @@
     
     <div>
         <ul id="myTab3">
-            <li class="current" onClick="nTabs(this,0);">IT技能</li>
-            <li class="norma3" onClick="nTabs(this,1);">IT技能</li>
-            <li class="norma3" onClick="nTabs(this,2);">IT技能</li>
-            <li class="norma3" onClick="nTabs(this,3);">IT技能</li>
+        	@foreach($cate as $k => $v)
+            <li class="norma3" curr_cate_id="{{$v['curr_cate_id']}}" re_num="{{$k}}" onClick="nTabs(this,{{$k}});">{{$v['cate_name']}}</li>
+            @endforeach
         </ul>
         <div class="clearh"></div>
         <div>
            <ul class="courseul" id="myTab3_Content0" style="display: block;">
-            <li>
+           	@foreach($currInfo as $v)
+            <li curr_id='{{$v['curr_id']}}'>
             	<div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
+                <img width="263" class="curr_img" style="border-radius:3px 3px 0 0;" src="{{$v['curr_img']}}" >
+                <p class="courTit"><a style="text-decoration:none;color:gray;" href="/curr/currcont/{{$v['curr_id']}}">{{$v['curr_name']}}</a></p>
                 <div class="gray">
                 <span>1小时前更新</span>
                 <span class="sp1">1255555人学习</span>
@@ -343,187 +343,20 @@
                 </div>
                 </div>
            </li>
-           <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>.
+           @endforeach
            <div class="clearh"></div>
           </ul>               
         </div>
         <div>
-           <ul class="courseul" id="myTab3_Content1" style="display: none;">
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>	
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <div class="clearh"></div>		
+           <ul class="courseul" id="myTab3_Content1" style="display:none;">	
            </ul>               
         </div>
         <div>
-           <ul class="courseul" id="myTab3_Content2" style="display: none;">
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>	
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <div class="clearh"></div>			
+           <ul class="courseul" id="myTab3_Content2" style="display: none;">	
            </ul>               
         </div>
         <div>
-           <ul class="courseul" id="myTab3_Content3" style="display: none;">
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>	
-            <li>
-                <div class="courselist">
-                <img width="263" style="border-radius:3px 3px 0 0;" src="images/c1.jpg" >
-                <p class="courTit">HTTP下载课程</p>
-                <div class="gray">
-                <span>1小时前更新</span>
-                <span class="sp1">1255555人学习</span>
-                <div style="clear:both"></div>
-                </div>
-                </div>
-            </li>
-            <div class="clearh"></div>		
+           <ul class="courseul" id="myTab3_Content3" style="display: none;">	
            </ul>               
         </div>
 	</div>
@@ -533,8 +366,54 @@
     
     
 </div>
-<span class="morecourse"><a href="courselist.html" class="btnlink">更多课程</a></span>
+<span class="morecourse"><a href="/curr/currlist" class="btnlink">更多课程</a></span>
 
 </div>
+
+<script type="text/javascript">
+	$(function(){
+		layui.use(['layer'],function(){
+			var layer=layui.layer;
+
+			$('.curr_img').click(function(){
+				var curr_id=$(this).parents('li').attr('curr_id');
+				location.href='/curr/currcont/'+curr_id;
+			});
+
+			//默认选中第一个分类
+			$('#myTab3').children('li').each(function(index){
+				var _this=$(this);
+				if(index==0){
+					_this.prop('class','current');
+				}
+			});
+
+			$('#myTab3').children('li').click(function(){
+				var _this=$(this);
+				var _check=_this.prop('class','current');
+
+				if(_check=='current'){
+					_this.siblings('li').prop('class','norma3');
+				}
+
+				var obj={};
+				obj.re_num=_this.attr('re_num');
+				obj.curr_cate_id=_this.attr('curr_cate_id');
+
+				$.post(
+					'/getCurrInfo',
+					{data:obj},
+					function(res){
+						$('.courseul').each(function(index){
+							if($(this).prop('id')=='myTab3_Content'+obj.re_num){
+								$(this).html(res);
+							}
+						});
+					},
+				)
+			});
+		});
+	});
+</script>
 
 @endsection
