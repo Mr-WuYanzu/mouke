@@ -46,7 +46,7 @@
           @foreach($currInfo as $k=>$v)
                 <li>
                     <div class="courselist">
-                    <a href="/curr/currcont/{{$v['curr_id']}}" target="_blank"><img style="border-radius:3px 3px 0 0;" width="240" src="/images/c1.jpg" title="会计基础"></a>
+                    <a href="/curr/currcont/{{$v['curr_id']}}" target="_blank"><img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/{{$v['curr_img']}}" title="会计基础"></a>
                     <p class="courTit"><a href="coursecont.html" target="_blank">{{$v['curr_name']}}</a></p>
                     <div class="gray">
                     <span>{{$v['classNum']}}课时</span>

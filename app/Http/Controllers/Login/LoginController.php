@@ -256,13 +256,24 @@ class LoginController extends Controller
         $userInfo=json_decode($data,true);
         $token = $userInfo['access_token'];
         $uid = $userInfo['uid'];
+//        dd($uid,$token);
 //        dd($userInfo);
+
         $urla="https://api.weibo.com/2/users/show.json?access_token=$token&uid=$uid";
 //        dd($urla);
-//        $uu = $this->curl($urla);
-        $uu = file_get_contents($urla);
-//        dd($uu);
+        $ch = curl_init($urla);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        // 关闭SSL验证
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        $uu = curl_exec($ch);
+//        dd(json_decode($uu,true));
+        curl_close($ch);
+
         $user = json_decode($uu,true);
+        if(isset($user['error'])){
+            echo '错误';die;
+        }
         $user_name = $user['screen_name'];
         $data = [
             'user_name'=>$user_name,
