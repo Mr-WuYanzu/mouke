@@ -22,15 +22,11 @@
     <div>
         <p class="formrow" style="">
             <label class="control-label" for="register_email">邮箱地址</label>
-<<<<<<< HEAD
             <input type="text" name='user_mail' style="margin-top:25px;">
             <div class="text-danger">请输入邮箱地址</div>
-=======
             <input type="text" name='user_mail'>
             <button type="button" class="uploadbtn" id="code">获取验证码</button>
->>>>>>> landi
         </p>
-        <input type="text" name='code'>
     </div>
 
     <div>
@@ -194,8 +190,7 @@ $(function() {
             if (user_name == '') {
                 layer.msg('用户名必填', {icon: 2});
                 return false;
-            } else if (!reg.test(user_name)) {
-                layer.msg('请注意查看用户名规则', {icon: 7});
+            } else if (!reg.test(user_name)) {..                layer.msg('请注意查看用户名规则', {icon: 7});
                 return false;
             }
             $.post(
@@ -209,40 +204,8 @@ $(function() {
                 }
             )
         });
+        //提交\
 
-        /*
-            //密码验证
-            $("input[name='pwd']").blur(function(){
-                var pwd = $("input[name='pwd']").val();
-                var reg_pwd = /^[\dA-Za-z_]{5,20}$/;
-                if(pwd == ''){
-                    layer.msg('密码必填',{icon:7});
-                    return false;
-                }else if(!reg.test(pwd)){
-                    layer.msg('请注意查看密码规则',{icon:7});
-                    return false;
-
-                }
-            })
-            //二次密码验证
-            $("input[name='pwd1']").blur(function(){
-                var pwd1 = $("input[name='pwd1']").val();
-                var pwd = $("input[name='pwd']").val();
-                var reg_pwd1 = /^[\dA-Za-z_]{5,20}$/;
-                if(pwd1 == ''){
-                    layer.msg('密码必填',{icon:7});
-                    return false;
-                }else if(!reg.test(pwd)){
-                    layer.msg('请注意查看密码规则',{icon:7});
-                    return false;
-                }else if(pwd1 != pwd){
-                    layer.msg('两次密码不一致！',{icon:2});
-                    return false;
-                }
-                // return true;
-            
-            })
-        */
         $("#btn").click(function () {
             var _token = $("#_token").val();
             var user_mail = $("input[name='user_mail']").val();
