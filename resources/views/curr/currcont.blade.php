@@ -46,8 +46,13 @@
                 <a class="layui-btn layui-btn-normal" href="javascript:;" id="btn" curr_id = "{{$currInfo['curr_id']}}">收藏课程</a>
             @endif
 
-            <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
-
+            @if($sub_status == '')
+                <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
+            @elseif($sub_status == 1)
+                <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe_no">取消订阅</a>
+            @elseif($sub_status == 2)
+                    <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
+            @endif
 
 
             <a class="codol fx" href="javascript:void(0);" onClick="$('#bds').toggle();">分享课程</a>
@@ -160,6 +165,7 @@
             var layer = layui.layer;
             //点击订阅
             $(document).on('click', '#subscribe', function () {
+                var _this=$(this);
                 //获取课程id
                 var curr_id = $(this).attr('curr_id');
                 $.post(
@@ -167,18 +173,51 @@
                     {curr_id: curr_id},
                     function (res) {
                         // console.log(res);
-                        layer.msg(res.msg,{icon:res.code,time:2000},function(){
-                            if (res.code == 1) {
-
-                            }else if(res.code == 2) {
-                                location.href='/login';
+                            if(res.code == 2) {
+                                layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                                    location.href='/login';
+                                });
+                            }else if(res.code == 1){
+                                layer.msg(res.msg,{icon:res.code,time:2000});
+                                _this.text('取消订阅');
+                                _this.prop('id','subscribe_no');
+                            }else if(res.code == 5){
+                                layer.msg(res.msg,{icon:res.code,time:2000});
                             }
-                        });
+
 
                     }
                     , 'json '
                 )
             })
+            //取消订阅
+            $(document).on('click', '#subscribe_no', function () {
+                var _this=$(this);
+                //获取课程id
+                var curr_id = $(this).attr('curr_id');
+                $.post(
+                    "/course/subscribe_no",
+                    {curr_id: curr_id},
+                    function (res) {
+                        // console.log(res);
+                        if(res.code == 2) {
+                            layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                                location.href='/login';
+                            });
+                        }else if(res.code == 1){
+                            layer.msg(res.msg,{icon:res.code,time:2000});
+                            _this.text('订阅课程');
+                            _this.prop('id','subscribe');
+                        }else if(res.code == 5){
+                            layer.msg(res.msg,{icon:res.code,time:2000});
+                        }
+                    }
+                    , 'json '
+                )
+            })
+
+
+
             //点击收藏
             $(document).on('click','#btn',function () {
                 var curr_id = $(this).attr('curr_id');
