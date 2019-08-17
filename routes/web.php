@@ -77,8 +77,14 @@ Route::prefix('/')->group(function(){
 });
 //个人中心页面
 Route::get('/center','user\UserController@usercenter');
+//我的课程页面
+Route::get('/user/getCurr','user\UserController@getCurr');
 //我的收藏页面
 Route::get('/user/collect','user\UserController@collect');
+//取消收藏
+Route::post('/user/cancelCollect','user\UserController@cancelCollect');
+//我的订阅页面
+Route::get('/user/subscribe','user\UserController@subscribe');
 //用户找回密码功能
 Route::get('/getpwd','pwd\RetrieveController@getpwd');
 //用户找回密码执行
