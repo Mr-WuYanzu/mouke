@@ -41,10 +41,8 @@ Route::prefix('/')->group(function(){
     Route::post('curr/getvideo','Curr\CurrController@getVideo');
 	//资讯列表
 	Route::get('article/articlelist','Article\ArticleController@articleList');
-	    // 点击资讯分类切换不同分类下的资讯
-        Route::post('article/info_cate_name','Article\ArticleController@info_cate_name');
 	//资讯详情
-	Route::get('article/articlecont/{id}','Article\ArticleController@articlecont');
+	Route::get('article/articlecont','Article\ArticleController@articlecont');
 	//讲师列表
 	Route::get('teacher/teacherlist','Teacher\TeacherController@teacherList');
 	//讲师详情
@@ -102,3 +100,5 @@ Route::prefix('/admin')->group(function(){
 
 #订阅课程
 Route::post('/course/subscribe','Curr\CurrController@subscribe');
+#取消订阅
+Route::post('/course/subscribe_no','Curr\CurrController@subscribe_no');
