@@ -51,10 +51,10 @@
         <div class="memb">
 
             <ul>
-                <li class="currnav"><a class="mb1" href="mycourse.html">我的课程</a></li>
-                <li><a class="mb3" href="myask.html">我的问答</a></li>
-                <li><a class="mb4" href="mynote.html">我的笔记</a></li>
-                <li><a class="mb12" href="myhomework.html">我的作业</a></li>
+                <li class="currnav"><a class="mb1" href="javascript:void(0);">我的课程</a></li>
+                <li><a class="mb3 collect" href="javascript:void(0);">我的收藏</a></li>
+                <li><a class="mb4" href="mynote.html">我的订阅</a></li>
+                <li><a class="mb12" href="myhomework.html">我的订单</a></li>
                 <li><a class="mb2" href="training_list.html" target="_blank">我的题库</a></li>
             </ul>
 
@@ -172,6 +172,31 @@
 
 <div class="clearh"></div>
 
+
+<script type="text/javascript">
+    $(function(){
+        layui.use(['layer'],function(){
+            var layer=layui.layer;
+
+            //我的收藏页面
+            $('.collect').click(function(){
+                $(this).parent('li').prop('class','currnav');
+                $(this).parent('li').siblings('li').prop('class','');
+
+                $.get(
+                    '/user/collect',
+                    function(res){
+                        if(res.code==2){
+                            layer.msg(res.font,{icon:res.skin,time:1000});
+                        }else{
+                           $('.membcont').html(res); 
+                        }
+                    }
+                )
+            });
+        });
+    });
+</script>
 
 <!-- InstanceEnd --></html>
 @endsection

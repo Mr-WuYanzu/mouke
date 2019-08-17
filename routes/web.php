@@ -75,6 +75,8 @@ Route::prefix('/')->group(function(){
 });
 //个人中心页面
 Route::get('/center','user\UserController@usercenter');
+//我的收藏页面
+Route::get('/user/collect','user\UserController@collect');
 //用户找回密码功能
 Route::get('/getpwd','pwd\RetrieveController@getpwd');
 //用户找回密码执行
