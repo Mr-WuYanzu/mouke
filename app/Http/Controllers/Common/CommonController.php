@@ -69,7 +69,7 @@ class CommonController extends Controller
     //查找用户信息
     public function getUserInfo(){
        $user_id = session('user_id');
-       $userInfo =  \App\user\User::where(['user_id'=>$user_id])->first();
+       $userInfo =  \App\user\User::where(['user_id'=>$user_id,'status'=>1])->first();
        return $userInfo;
     }
 }
