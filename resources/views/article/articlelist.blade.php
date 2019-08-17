@@ -19,7 +19,6 @@
     </span>
     
 </div>
-<div class="clearh"></div>
 
 <div class="coursetext">
 	<div class="articlelist">
