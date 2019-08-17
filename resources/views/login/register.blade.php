@@ -112,6 +112,18 @@
 
             <div class="text-danger">请输入邮箱地址</div>
 
+{{--<form onsubmit="return check();" method="post" >--}}
+    {{--<input type="hidden" value="{{csrf_token()}}" id="_token">--}}
+    {{--<div>--}}
+        {{--<p class="formrow" style="">--}}
+            {{--<label class="control-label" for="register_email">邮箱地址</label>--}}
+            {{--<input type="text" name='user_mail' style="margin-top:25px;">--}}
+            {{--<div class="text-danger">请输入邮箱地址</div>--}}
+            {{--<input type="text" name='user_mail'>--}}
+            {{--<button type="button" class="uploadbtn" id="code">获取验证码</button>--}}
+        {{--</p>--}}
+    {{--</div>--}}
+
 
             </p>
             <input type="text" name='code'><button type="button" class="uploadbtn" id="code">获取验证码</button>
@@ -325,6 +337,7 @@
                     if(code == ''){
                         layer.msg('验证码必填',{icon:7});
                     }
+
                     $.post(
                         '/checkcode',
                         {code:code},
@@ -413,6 +426,52 @@
                         return false;
                     }
 
+                })
+
+
+        //用户性验证
+        $("input[name='user_name']").blur(function () {
+            var user_name = $("input[name='user_name']").val();
+            var reg_name = /^[\u4e00-\u9fa5]{1,7}$|^[\dA-Za-z_]{1,14}$/;
+            if (user_name == '') {
+                layer.msg('用户名必填', {icon: 2});
+                return false;
+            } else if (!reg.test(user_name)) {
+                layer.msg('请注意查看用户名规则', {icon: 7});
+                return false;
+            }
+            $.post(
+                '/checkname',
+                {user_name: user_name},
+                function (res) {
+                    // console.log(res);
+                    if (res.code == 300) {
+                        layer.msg(res.msg, {icon: 7});
+                    }
+                }
+            )
+        });
+        //提交\
+
+        $("#btn").click(function () {
+            var _token = $("#_token").val();
+            var user_mail = $("input[name='user_mail']").val();
+            var reg_mail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/;
+            var user_name = $("input[name='user_name']").val();
+            var reg_name = /^[\u4e00-\u9fa5]{1,7}$|^[\dA-Za-z_]{1,14}$/;
+            var pwd = $("input[name='pwd']").val();
+            var reg_pwd = /^[\dA-Za-z_]{5,20}$/;
+            var pwd1 = $("input[name='pwd1']").   val();
+
+            if (user_mail == '') {
+                layer.msg('邮箱必填', {icon: 2});
+                return false;
+            } else if (!reg_mail.test(user_mail)) {
+                layer.msg('您的邮箱格式不正确', {icon: 2});
+                return false;
+            }
+
+
                     if (user_name == '') {
                         layer.msg('用户名必填', {icon: 2});
                         return false;
@@ -471,8 +530,7 @@
                     return false;
                 }
 
-            }
-        )
+            })
     });
 
 </script>
