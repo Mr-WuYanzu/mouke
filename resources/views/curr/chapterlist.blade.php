@@ -360,7 +360,7 @@ $(function(){
                     function(res){
                         layer.msg(res.font,{icon:res.skin,time:1000},function(){
                             if(res.code==1){
-                                location.href='/curr/chapterlist';
+                                history.go(0);
                             }
                         });
                     },
