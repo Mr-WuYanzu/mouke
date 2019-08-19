@@ -33,7 +33,7 @@ class CurrCommentController extends CommonController
     	$user_id=5;
     	$data['user_id']=$user_id;
     	//课程id
-    	$data['curr_id']=1;
+    	$data['curr_id']=$request->post('curr_id');
     	//实例化模型类
     	$userModel=new UserModel();
     	$commentModel=new CurrCommentModel();

@@ -264,7 +264,6 @@ class LoginController extends Controller
 						];
 						session($user_id);
 						// dd($data);
-						echo 111;die;
 						return ['code'=>200,'msg'=>"登录成功，即将进入主页"];
 					}else{
 						return ['code'=>401,'msg'=>"登录失败"];
@@ -337,10 +336,18 @@ class LoginController extends Controller
         $result = UserModel::where(['user_name'=>$user_name])->first();
 
         if($result){
+            $user_id = [
+                'user_id'=>$result['user_id'],
+            ];
+            session($user_id);
             echo "<script>alert('登陆成功');location.href='/index'</script>";
         }else{
-            $res = UserModel::insert($data);
+            $res = UserModel::insertGetId($data);
             if($res){
+                $user_id = [
+                    'user_id'=>$res,
+                ];
+                session($user_id);
                 echo "<script>alert('登陆成功');location.href='/index'</script>";
             }else{
                 echo "<script>alert('登录失败，请重新登陆');location.href='/login'</script>";
