@@ -42,10 +42,8 @@ Route::prefix('/')->group(function(){
     Route::post('curr/getvideo','Curr\CurrController@getVideo');
 	//资讯列表
 	Route::get('article/articlelist','Article\ArticleController@articleList');
-	    // 点击资讯分类切换不同分类下的资讯
-        Route::post('article/info_cate_name','Article\ArticleController@info_cate_name');
 	//资讯详情
-	Route::get('article/articlecont/{id}','Article\ArticleController@articlecont');
+	Route::get('article/articlecont','Article\ArticleController@articlecont');
 	//讲师列表
 	Route::get('teacher/teacherlist','Teacher\TeacherController@teacherList');
 	//讲师详情
@@ -78,6 +76,14 @@ Route::prefix('/')->group(function(){
 });
 //个人中心页面
 Route::get('/center','user\UserController@usercenter');
+//我的课程页面
+Route::get('/user/getCurr','user\UserController@getCurr');
+//我的收藏页面
+Route::get('/user/collect','user\UserController@collect');
+//个人中心取消收藏
+Route::post('/user/cancelCollect','user\UserController@cancelCollect');
+//我的订阅页面
+Route::get('/user/subscribe','user\UserController@subscribe');
 //用户找回密码功能
 Route::get('/getpwd','pwd\RetrieveController@getpwd');
 //用户找回密码执行
@@ -95,3 +101,5 @@ Route::prefix('/admin')->group(function(){
 
 #订阅课程
 Route::post('/course/subscribe','Curr\CurrController@subscribe');
+#取消订阅
+Route::post('/course/subscribe_no','Curr\CurrController@subscribe_no');

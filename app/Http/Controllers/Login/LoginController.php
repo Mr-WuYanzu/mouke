@@ -173,7 +173,6 @@ class LoginController extends Controller
 		$user_info = $data['user_info'];
 		$login_pwd = $data['pwd'];
 		$info = preg_match($reg,$user_info);
-
 		if($info){
 			$result = UserModel::where(['user_mail'=>$user_info])->first();
 			$pwd = $result['pwd'];
@@ -257,7 +256,6 @@ class LoginController extends Controller
 						'last_error_time'=>null
 					];
 					$res = UserModel::where($where)->update($updInfo);
-					// echo $res;die;
 					if($res == 0){
 						// echo "登陆成功";die;
 						// session(['user_id'=>$result['user_id']]);
@@ -266,6 +264,7 @@ class LoginController extends Controller
 						];
 						session($user_id);
 						// dd($data);
+						echo 111;die;
 						return ['code'=>200,'msg'=>"登录成功，即将进入主页"];
 					}else{
 						return ['code'=>401,'msg'=>"登录失败"];

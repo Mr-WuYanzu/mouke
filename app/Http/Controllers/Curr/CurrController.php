@@ -267,9 +267,12 @@ class CurrController extends CommonController
         $user_id=session('user_id');
 //        $user_id=8;
         if($user_id){
-            #查询收藏表中的数据
+            #查询收藏表中的状态
             $collect_status=DB::table('curr_collect')->where(['user_id'=>$user_id,'curr_id'=>$curr_id,'status'=>1])->value('status');
+            #查询订阅表的状态
+            $sub_status=DB::table('subscribe_curr')->where(['user_id'=>$user_id,'curr_id'=>$curr_id,'status'=>1])->value('status');
         }else{
+            $sub_status='';
             $collect_status='';
         }
         //用户信息
@@ -284,7 +287,8 @@ class CurrController extends CommonController
                     'chapter'=>$chapter,
                     'collect_status'=>$collect_status,
                     'userInfo'=>$userInfo,
-                    'relevant_curr'=>$Relevant_curr
+                    'relevant_curr'=>$Relevant_curr,
+                    'sub_status'=>$sub_status,
                 ]
             );
 
@@ -440,35 +444,83 @@ class CurrController extends CommonController
      */
     public function subscribe(Request $request){
         #接受课程id
-        $curr_id=$request->curr_id;
+        $curr_id=$request->post('curr_id');
+        if(empty($curr_id)){
+            return ['code'=>5,'msg'=>'请勿非法操作'];
+        }
         #接受用户id
         $user_id=session('user_id');
         if(empty($user_id)){
             return ['code'=>2,'msg'=>'请先登录'];
         }else{
-            #根据课程id 查询课程表中的 价格
-            $curr_price=DB::table('curr')->where(['curr_id'=>$curr_id])->value('curr_price');
-            #拼装 存入订单表的数据
-            $arr=[
-                'user_id'=>$user_id,
-                'order_no'=>$this->order_no($user_id),
-                'curr_id'=>$curr_id,
-                'amount'=>$curr_price
-            ];
             #先查询用户是否已经订阅
-            $select=DB::table('curr_order')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->first();
-            if($select){
-                return ['code'=>5,'msg'=>'您已经订阅---》请勿重复订阅'];
-            }else{
-                $insert=DB::table('curr_order')->insert($arr);
+            $select=DB::table('subscribe_curr')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->first();
+            if(empty($select)){
+                #为空证明 第一次订阅 做第一次添加【将用户 和 课程信息 存入订阅表中】
+                $insert=DB::table('subscribe_curr')->insert(
+                    [
+                        'user_id'=>$user_id,
+                        'curr_id'=>$curr_id,
+                        'create_time'=>time()
+                    ]
+                );
                 if($insert){
                     return ['code'=>1,'msg'=>'订阅成功'];
                 }else{
-                    return ['code'=>5,'msg'=>'订阅失败请重试'];
+                    return ['code'=>5,'msg'=>'订阅失败'];
+                }
+            }else{
+                #不为空 证明不是第一次订阅 修改状态
+                $update=DB::table('subscribe_curr')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->update(
+                    [
+                        'status'=>1,
+                        'update_time'=>time()
+                    ]
+                );
+                if($update){
+                    return ['code'=>1,'msg'=>'订阅成功'];
+                }else{
+                    return ['code'=>5,'msg'=>'订阅失败'];
                 }
             }
         }
     }
+    #取消订阅
+    public function subscribe_no(Request $request){
+        #接受课程id
+        $curr_id=$request->post('curr_id');
+        if(empty($curr_id)){
+            return ['code'=>5,'msg'=>'请勿非法操作'];
+        }
+        #接受用户id
+        $user_id=session('user_id');
+        if(empty($user_id)){
+            return ['code'=>2,'msg'=>'请先登录'];
+        }else{
+            #先查询用户是否已经订阅
+            $select=DB::table('subscribe_curr')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->first();
+            if(!empty($select)){
+                #不为空证明 以订阅【修改订阅表中的 状态】
+                $update=DB::table('subscribe_curr')->where(['user_id'=>$user_id,'curr_id'=>$curr_id])->update(
+                    [
+                        'status'=>2,
+                        'update_time'=>time()
+                    ]
+                );
+                if($update){
+                    return ['code'=>1,'msg'=>'取消订阅成功'];
+                }else{
+                    return ['code'=>5,'msg'=>'取消订阅失败'];
+                }
+            }else{
+                return ['code'=>5,'msg'=>'该课程未订阅请先订阅'];
+            }
+        }
+    }
+
+
+
+
 
     /**
      * [订单单号]
@@ -522,7 +574,6 @@ class CurrController extends CommonController
             }
         }
     }
-
     #取消收藏课程
     public function collectdo_no(Request $request){
         #接受 课程id

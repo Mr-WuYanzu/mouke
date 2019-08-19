@@ -51,10 +51,10 @@
         <div class="memb">
 
             <ul>
-                <li class="currnav"><a class="mb1" href="mycourse.html">我的课程</a></li>
-                <li><a class="mb3" href="myask.html">我的问答</a></li>
-                <li><a class="mb4" href="mynote.html">我的笔记</a></li>
-                <li><a class="mb12" href="myhomework.html">我的作业</a></li>
+                <li class="currnav"><a class="mb1 curr" href="javascript:void(0);">我的课程</a></li>
+                <li><a class="mb3 collect" href="javascript:void(0);">我的收藏</a></li>
+                <li><a class="mb4 subscribe" href="javascript:void(0);">我的订阅</a></li>
+                <li><a class="mb12" href="myhomework.html">我的订单</a></li>
                 <li><a class="mb2" href="training_list.html" target="_blank">我的题库</a></li>
             </ul>
 
@@ -72,94 +72,6 @@
                 <li>已学完</li>
                 <li>收藏</li>
             </ul>
-            <div class="tab_box">
-                <div>
-                    {{--学习中课程--}}
-                    <ul class="memb_course">
-                        <li>
-                            <div class="courseli">
-                                <a href="video.html" target="_blank"><img width="230" src="images/c8.jpg"></a>
-                                <p class="memb_courname"><a href="video.html" class="blacklink">会计基础</a></p>
-                                <div class="mpp">
-                                    <div class="lv" style="width:20%;"></div>
-                                </div>
-                                <p class="goon"><a href="video.html"><span>继续学习</span></a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="courseli">
-                                <a href="video.html" target="_blank"><img width="230" src="images/c8.jpg"></a>
-                                <p class="memb_courname"><a href="video.html" class="blacklink">会计基础</a></p>
-                                <div class="mpp">
-                                    <div class="lv" style="width:20%;"></div>
-                                </div>
-                                <p class="goon"><a href="video.html"><span>继续学习</span></a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="courseli">
-                                <a href="video.html" target="_blank"><img width="230" src="images/c8.jpg"></a>
-                                <p class="memb_courname"><a href="video.html" class="blacklink">会计基础</a></p>
-                                <div class="mpp">
-                                    <div class="lv" style="width:20%;"></div>
-                                </div>
-                                <p class="goon"><a href="video.html"><span>继续学习</span></a></p>
-                            </div>
-                        </li>
-                        <div style="height:10px;" class="clearfix"></div>
-                    </ul>
-                </div>
-
-                <div class="hide">
-                    <div>
-                        {{--已学完课程--}}
-                        <ul class="memb_course">
-                            <li>
-                                <div class="courseli">
-                                    <a href="video.html" target="_blank"><img width="230" src="images/c8.jpg"></a>
-                                    <p class="memb_courname"><a href="coursecont.html" class="blacklink">会计基础</a></p>
-                                    <div class="mpp">
-                                        <div class="lv" style="width:100%;"></div>
-                                    </div>
-                                    <p class="goon"><a href="coursecont.html"><span>查看课程</span></a></p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="courseli">
-                                    <a href="video.html" target="_blank"><img width="230" src="images/c8.jpg"></a>
-                                    <p class="memb_courname"><a href="coursecont.html" class="blacklink">会计基础</a></p>
-                                    <div class="mpp">
-                                        <div class="lv" style="width:100%;"></div>
-                                    </div>
-                                    <p class="goon"><a href="coursecont.html"><span>查看课程</span></a></p>
-                                </div>
-                            </li>
-                            <div class="clearfix" style="height:10px;"></div>
-                        </ul>
-
-                    </div>
-                </div>
-                <div class="hide">
-                    <div>
-                        {{--收藏的课程--}}
-                        <ul class="memb_course">
-                            <li>
-                                <div class="courseli mysc">
-                                    <a href="video.html" target="_blank"><img width="230" src="images/c8.jpg" class="mm"></a>
-                                    <p class="memb_courname"><a href="video.html" class="blacklink">会计基础</a></p>
-                                    <div class="mpp">
-                                        <div class="lv" style="width:20%;"></div>
-                                    </div>
-                                    <p class="goon"><a href="#"><span>继续学习</span></a></p>
-                                    <div class="mask"><span class="qxsc"  title="移除收藏">▬</span></div>
-                                </div>
-                            </li>
-                            <div class="clearfix" style="height:10px;"></div>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </div>
 
@@ -172,6 +84,76 @@
 
 <div class="clearh"></div>
 
+
+<script type="text/javascript">
+    $(function(){
+        layui.use(['layer'],function(){
+            var layer=layui.layer;
+
+            $.get(
+                '/user/getCurr',
+                function(res){
+                    if(res.code==2){
+                        $('.membcont').html('');
+                    }else{
+                        $('.membcont').html(res);
+                    }
+                }
+            )
+
+            //我的课程页面
+            $('.curr').click(function(){
+                $(this).parent('li').prop('class','currnav');
+                $(this).parent('li').siblings('li').prop('class','');
+
+                $.get(
+                    '/user/getCurr',
+                    function(res){
+                        if(res.code==2){
+                            $('.membcont').html();
+                        }else{
+                            $('.membcont').html(res);
+                        }
+                    }
+                )
+            });
+
+            //我的收藏页面
+            $('.collect').click(function(){
+                $(this).parent('li').prop('class','currnav');
+                $(this).parent('li').siblings('li').prop('class','');
+
+                $.get(
+                    '/user/collect',
+                    function(res){
+                        if(res.code==2){
+                            layer.msg(res.font,{icon:res.skin,time:1000});
+                        }else{
+                           $('.membcont').html(res); 
+                        }
+                    }
+                )
+            });
+
+            //我的订阅页面
+            $('.subscribe').click(function(){
+                $(this).parent('li').prop('class','currnav');
+                $(this).parent('li').siblings('li').prop('class','');
+
+                $.get(
+                    '/user/subscribe',
+                    function(res){
+                        if(res.code==2){
+                            layer.msg(res.font,{icon:res.skin,time:1000});
+                        }else{
+                           $('.membcont').html(res); 
+                        }
+                    },
+                )
+            });
+        });
+    });
+</script>
 
 <!-- InstanceEnd --></html>
 @endsection
