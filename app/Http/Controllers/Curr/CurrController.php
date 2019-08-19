@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonController;
 use App\Model\CurrCommentModel;
 use App\Model\CurrCollectModel;
+use App\Model\QuesModel;
 use Illuminate\Support\Facades\Redis;
 use mysql_xdevapi\Collection;
 use Illuminate\Support\Facades\DB;
@@ -393,6 +394,27 @@ class CurrController extends CommonController
             }
         }
 
+
+    }
+
+
+    //问答
+    public function question(Request $request)
+    {
+        $arr = $request->post();
+        $ques = $arr['ques'];
+        $question = $arr['question'];
+        $data = [
+          'ques'=>$ques,
+          'question'=>$question,
+          'time'=>time()
+        ];
+        $res = QuesModel::insert($data);
+        if($res){
+            return ['code'=>200,'msg'=>'提交成功！'];
+        }else{
+            return ['code'=>300,'msg'=>'提交失败'];
+        }
 
     }
 
