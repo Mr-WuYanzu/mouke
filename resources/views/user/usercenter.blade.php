@@ -135,6 +135,7 @@
                 )
             });
 
+            //我的订阅页面
             $('.subscribe').click(function(){
                 $(this).parent('li').prop('class','currnav');
                 $(this).parent('li').siblings('li').prop('class','');

@@ -120,6 +120,11 @@ class UserController extends CommonController
     	echo view('user/subscribe',['subscribeInfo'=>$subscribeInfo]);
     }
 
+    /**
+     * [取消收藏]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function cancelCollect(Request $request)
     {
     	//接收用户id
