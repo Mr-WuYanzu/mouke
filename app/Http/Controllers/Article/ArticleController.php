@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Article;
 
 use App\Http\Controllers\Common\CommonController;
+use App\Model\CurrModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -27,7 +28,9 @@ class ArticleController extends CommonController
         $Info=DB::table('infomation')->get();
         foreach($Info as $k=>$v){
             //查询出每个资讯对应的资讯分类名称
-            $Info[$k]->info_name=DB::table('information_cate')->where(['info_cate_id'=>$v->info_cate_id])->value('info_name');
+            $Info[$k]->info_name=DB::table('information_cate')
+                ->where(['info_cate_id'=>$v->info_cate_id])
+                ->value('info_name');
         }
         //热门资讯
         $hot=DB::table('infomation')->where(['info_hot'=>2])->get();
@@ -36,8 +39,15 @@ class ArticleController extends CommonController
         if(isset($userInfo['pwd'])){
             unset($userInfo['pwd']);
         }
+        //查询推荐课程
+        $currInfo = $this->_getRecommend();
     	//渲染视图
-    	return view('article/articlelist',['cate_Info'=>$cate_Info,'Info'=>$Info,'hot'=>$hot,'userInfo'=>$userInfo]);
+    	return view('article/articlelist',[
+    	    'cate_Info'=>$cate_Info,
+            'Info'=>$Info,'hot'=>$hot,
+            'userInfo'=>$userInfo,
+            'currInfo'=>$currInfo
+        ]);
     }
 
     /**
@@ -58,8 +68,16 @@ class ArticleController extends CommonController
         if(isset($userInfo['pwd'])){
             unset($userInfo['pwd']);
         }
+        //查询推荐课程
+        $currInfo = $this->_getRecommend();
     	//渲染视图
-    	return view('article/articlecont',['info_name'=>$info_name,'Info'=>$Info,'hot'=>$hot,'userInfo'=>$userInfo]);
+    	return view('article/articlecont',[
+    	    'info_name'=>$info_name,
+            'Info'=>$Info,
+            'hot'=>$hot,
+            'userInfo'=>$userInfo,
+            'currInfo'=>$currInfo
+        ]);
     }
 
     /*
@@ -76,6 +94,12 @@ class ArticleController extends CommonController
         return view('article.info_cate_name',compact('Info_name'));
     }
 
+    //获取推荐课程
+    private function _getRecommend(){
+        //根据课程学习人数排序进行推荐
+        $currInfo = CurrModel::orderBy('study_num','desc')->limit(2)->get();
+        return $currInfo;
+    }
 
 
 

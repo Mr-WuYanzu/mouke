@@ -23,6 +23,7 @@
     </span>
     <ul class="courseul">
     <li class="curr" style="border-radius:3px 3px 0 0;background:#fb5e55;"><h3 style="color:#fff;"><a href="#" class="whitea" onclick="history.go(0)">全部课程</a></h3>
+        <h5 style="color: white"> <input type="radio" name="free" class="free" value="1">&nbsp免费课程 &nbsp&nbsp&nbsp&nbsp&nbsp <input type="radio" name="free" class="free" value="2">&nbsp收费课程 </h5>
         @foreach($curr_cate_info as $k=>$v)
             <li>
                 <h4><span style="cursor: pointer" class="cate" cate_id="{{$v['curr_cate_id']}}">{{$v['cate_name']}}</span></h4>
@@ -34,7 +35,6 @@
                             @endforeach
                         </ul>
                         <div class="clearh"></div>
-
                 @endforeach
             </li>
 
@@ -49,7 +49,7 @@
                 <li>
                     <div class="courselist">
                     <a href="/curr/currcont/{{$v['curr_id']}}" target="_blank"><img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/{{$v['curr_img']}}" title="会计基础"></a>
-                    <p class="courTit"><a href="coursecont.html" target="_blank">{{$v['curr_name']}}</a></p>
+                    <p class="courTit"><a href="/curr/currcont/{{$v['curr_id']}}" target="_blank">{{$v['curr_name']}}</a></p>
                     <div class="gray">
                     <span>{{$v['classNum']}}课时</span>
                     <span class="sp1">1255555人学习</span>
@@ -95,6 +95,14 @@
         $(this).addClass('cat');
         var cate_id = $(this).attr('cate_id');
         var search = $('#sear').val();
+        //检测收费付费按钮的状态
+        var free = $('.free');
+        var free_type=null;
+        free.each(function (index) {
+            if($(this).prop('checked')==true){
+                free_type=$(this).val();
+            }
+        })
         var data='';
         var cxk = $('#cxk');
         var _page = $('.pagination');//分页展示
@@ -102,7 +110,7 @@
         $.ajax({
             url:'/cateSearch',
             type:'post',
-            data:{cate_id:cate_id,search:search},
+            data:{cate_id:cate_id,search:search,free_type:free_type},
             dataType:'json',
             success:function (res) {
                 for (let index in res.currInfo.data){
@@ -111,7 +119,7 @@
                         '<a href="/curr/currcont/'+res.currInfo.data[index].curr_id+'" target="_blank">' +
                         '<img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/'+res.currInfo.data[index].curr_img+'" title="会计基础">' +
                         '</a>' +
-                        '<p class="courTit"><a href="coursecont.html" target="_blank">'+res.currInfo.data[index].curr_name+'</a></p><div class="gray">'+
+                        '<p class="courTit"><a href="/curr/currcont/'+res.currInfo.data[index].curr_id+'" target="_blank">'+res.currInfo.data[index].curr_name+'</a></p><div class="gray">'+
                         '<span>'+res.currInfo.data[index].classNum+'课时</span>'+
                         '<span class="sp1">1255555人学习</span><div style="clear:both"></div></div></div></li>';
                 }
@@ -158,7 +166,7 @@
                         '<a href="/curr/currcont/'+res.currInfo.data[index].curr_id+'" target="_blank">' +
                         '<img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/'+res.currInfo.data[index].curr_img+'" title="会计基础">' +
                         '</a>' +
-                        '<p class="courTit"><a href="coursecont.html" target="_blank">'+res.currInfo.data[index].curr_name+'</a></p><div class="gray">'+
+                        '<p class="courTit"><a href="/curr/currcont/'+res.currInfo.data[index].curr_id+'" target="_blank">'+res.currInfo.data[index].curr_name+'</a></p><div class="gray">'+
                         '<span>'+res.currInfo.data[index].classNum+'课时</span>'+
                         '<span class="sp1">1255555人学习</span><div style="clear:both"></div></div></div></li>';
                 }
@@ -173,7 +181,7 @@
         //页面点击
         var click_span = _this.siblings('span[class="page current"]');
         //上一页
-        var up_page = _this.siblings('span[click_type=up]');
+        // var up_page = _this.siblings('span[click_type=up]');
         var click_status = $(this).prop('class');
         if(click_status=='page disabled' || click_status=='page current'){
             return false;
@@ -206,7 +214,7 @@
                         '<a href="/curr/currcont/'+res.currInfo.data[index].curr_id+'" target="_blank">' +
                         '<img style="border-radius:3px 3px 0 0;" width="240" src="http://curr.img.com/'+res.currInfo.data[index].curr_img+'" title="会计基础">' +
                         '</a>' +
-                        '<p class="courTit"><a href="coursecont.html" target="_blank">'+res.currInfo.data[index].curr_name+'</a></p><div class="gray">'+
+                        '<p class="courTit"><a href="/curr/currcont/'+res.currInfo.data[index].curr_id+'" target="_blank">'+res.currInfo.data[index].curr_name+'</a></p><div class="gray">'+
                         '<span>'+res.currInfo.data[index].classNum+'课时</span>'+
                         '<span class="sp1">1255555人学习</span><div style="clear:both"></div></div></div></li>';
                 }
@@ -226,5 +234,6 @@
         })
 
     })
+
 </script>
 @endsection

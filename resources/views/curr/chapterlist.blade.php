@@ -43,7 +43,7 @@ $(function(){
 		</div>
    </div>
    <div class="course_img1">
-	   <img src="images/c1.jpg" height="140">	   
+	   <img src="http://curr.img.com/{{$currInfo['curr_img']}}" height="140">
    </div>
    <div class="course_xq">
        <span class="courstime1"><p>课时<br/><span class="coursxq_num">{{$currInfo['classNum']}}课时</span></p></span>
@@ -183,8 +183,8 @@ $(function(){
     <h3 class="righttit">授课讲师</h3>
     <div class="teacher">
     <div class="teapic ppi">
-    <a href="teacher.html" target="_blank"><img src="images/teacher.png" width="80" class="teapicy" title="张民智"></a>
-     <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
+    <a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" target="_blank"><img src="http://curr.img.com/{{$teacherInfo['header_img']}}" width="80" class="teapicy" title="张民智"></a>
+     <h3 class="tname"><a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
     </div>
     <div class="clearh"></div>
     <p>{{$teacherInfo['t_desc']}}</p>
@@ -212,12 +212,12 @@ $(function(){
     <h3 class="righttit">相关课程</h3>
     <div class="teacher">
         @foreach($relevant_curr as $k=>$v)
-    <div class="teapic">
-        <a href="#"  target="_blank"><img src="images/c1.jpg" height="60" title="{{$v['curr_name']}}"></a>
-        <h3 class="courh3"><a href="#" class="peptitle" target="_blank">{{$v['curr_name']}}</a></h3>
-    </div>
-    <div class="clearh"></div>
-            @endforeach
+            <div class="teapic">
+                <a href="/curr/chapterlist/{{$v['curr_id']}}"  target="_blank"><img src="http://curr.img.com/{{$v['curr_img']}}" height="60" title="{{$v['curr_name']}}"></a>
+                <h3 class="courh3"><a href="/curr/chapterlist/{{$v['curr_id']}}" class="peptitle" target="_blank">{{$v['curr_name']}}</a></h3>
+            </div>
+            <div class="clearh"></div>
+        @endforeach
 
     </div>
     </div>
