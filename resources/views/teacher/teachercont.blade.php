@@ -12,7 +12,7 @@
 <div class="coursecont">
 <div class="coursepic tecti">
 	<div class="teaimg">
-    <img src="{{asset('images/teacher.jpg')}}" width="150"> 
+    <img src="http://curr.img.com/{{$teacherInfo['header_img']}}" width="150">
     </div>
     <div class="teachtext">
     	<h3>{{$teacherInfo['t_name']}}&nbsp;&nbsp;<strong>会计基础、会计电算化讲师</strong></h3>
@@ -31,11 +31,11 @@
 <ul class="tcourseul">
 	@foreach($currInfo as $v)
 	<li>
-	    <span class="courseimg tcourseimg"><a href="/curr/currcont" target="_blank"><img width="230" src="{{asset('images/c8.jpg')}}"></a></span>
+	    <span class="courseimg tcourseimg"><a href="/curr/currcont" target="_blank"><img width="230" src="http://curr.img.com/{{$v['curr_img']}}"></a></span>
 	    <span class="tcoursetext">
 	       <h4><a href="/curr/currcont" target="_blank" class="teatt">{{$v['curr_name']}}</a><a class="state">@if($v['status']==1) 已完结 @else 更新中 @endif</a></h4>
 	       <p class="teadec">{{str_replace(mb_substr($v['curr_detail'],120,mb_strlen($v['curr_detail'])),'...',$v['curr_detail'])}}</p>
-	       <p class="courselabel clock">{{$v['total_class_hour']}}课时 600分钟<span class="courselabel student">2555人学习</span><span class="courselabel pingjia">评价：<img width="71" height="14" src="{{asset('images/evaluate.png')}}" data-bd-imgshare-binded="1"></span></p>
+	       <p class="courselabel clock">{{$v['total_class_hour']}}课时 600分钟<span class="courselabel student">{{$v['study_num']}}人学习</span><span class="courselabel pingjia">评价：<img width="71" height="14" src="{{asset('images/evaluate.png')}}" data-bd-imgshare-binded="1"></span></p>
 	   </span>
 	   <div style="height:0" class="clearh"></div>
 	</li>

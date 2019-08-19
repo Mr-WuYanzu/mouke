@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Common\CommonController;
 use App\Model\CurrCommentModel;
 use App\Model\CurrCollectModel;
+use App\Model\QuesModel;
 use Illuminate\Support\Facades\Redis;
 use mysql_xdevapi\Collection;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,7 @@ use phpDocumentor\Reflection\Location;
 class CurrController extends CommonController
 {
     //课程分页每页显示条数
-    protected $page_size=2;
+    protected $page_size=3;
 	/**
 	 * [课程列表]
 	 * @return [type] [description]
@@ -69,16 +70,33 @@ class CurrController extends CommonController
     //课程分类搜索
     public function cateSearch(Request $request){
         $cate_id = intval($request->post('cate_id'));
+        $free_type = $request->post('free_type');
         //获取此分类的所包含分类id
         $cateId = $this->getCateId($cate_id);
         $cateId[]=$cate_id;
         $search = $request->post('search');
         //根据条件搜索课程
-        if(!empty($search)){
-            $currInfo = CurrModel::where([['curr_name','like',"$search%"],'is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+        if(!empty($free_type)){
+            $where=[
+                ['curr_name','like',"$search%"],
+                'is_show'=>1,
+                'curr_status'=>1,
+                'is_pay'=>$free_type
+            ];
         }else{
-            $currInfo = CurrModel::where(['is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+            $where=[
+                ['curr_name','like',"$search%"],
+                'is_show'=>1,
+                'curr_status'=>1
+            ];
         }
+
+//        if(!empty($search)){
+//            $currInfo = CurrModel::where([['curr_name','like',"$search%"],'is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+//        }else{
+//            $currInfo = CurrModel::where(['is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+//        }
+        $currInfo = CurrModel::where($where)->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
         //获取课时个数
         foreach ($currInfo as $k=>$v){
             $currInfo[$k]['classNum']=0;
@@ -99,24 +117,50 @@ class CurrController extends CommonController
     //课程分页数据查找
     public function getPageData(Request $request){
         $cate_id = intval($request->post('cate_id'));
-
-        if($cate_id!=0){
-            //获取此分类的所包含分类id
-            $cateId = $this->getCateId($cate_id);
-            $cateId[]=$cate_id;
-        }
         //搜索关键字
         $search = $request->post('search');
-        //根据条件搜索课程
-        if(!empty($search) && $cate_id !== 0){#根据分类id和搜索关键字搜索
-            $currInfo = CurrModel::where([['curr_name','like',"$search%"],'is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
-        }else if(!empty($search)){#根据搜索关键字查找
-            $currInfo = CurrModel::where([['curr_name','like',"$search%"],'is_show'=>1,'curr_status'=>1])->paginate($this->page_size);
-        }else if($cate_id!=0){#根据分类进行查找
-            $currInfo = CurrModel::where(['is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
-        }else{#查找所有
-            $currInfo = CurrModel::where(['curr_status'=>1,'is_show'=>1])->paginate($this->page_size);
+        //获取此分类的所包含分类id
+        $cateId = $this->getCateId($cate_id);
+        $cateId[]=$cate_id;
+        if(!empty($free_type)){
+            $where=[
+                ['curr_name','like',"$search%"],
+                'is_show'=>1,
+                'curr_status'=>1,
+                'is_pay'=>$free_type
+            ];
+        }else{
+            $where=[
+                ['curr_name','like',"$search%"],
+                'is_show'=>1,
+                'curr_status'=>1
+            ];
         }
+        if(!empty($free_type)){
+            $where = [
+                ['curr_name', 'like', "$search%"],
+                'is_show' => 1,
+                'curr_status' => 1,
+                'is_pay'=>$free_type
+            ];
+        }else {
+            $where = [
+                ['curr_name', 'like', "$search%"],
+                'is_show' => 1,
+                'curr_status' => 1
+            ];
+        }
+        //根据条件搜索课程   后期可能会用到
+//        if(!empty($search) && $cate_id !== 0){#根据分类id和搜索关键字搜索
+//            $currInfo = CurrModel::where([['curr_name','like',"$search%"],'is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+//        }else if(!empty($search)){#根据搜索关键字查找
+//            $currInfo = CurrModel::where([['curr_name','like',"$search%"],'is_show'=>1,'curr_status'=>1])->paginate($this->page_size);
+//        }else if($cate_id!=0){#根据分类进行查找
+//            $currInfo = CurrModel::where(['is_show'=>1,'curr_status'=>1])->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+//        }else{#查找所有
+//            $currInfo = CurrModel::where(['curr_status'=>1,'is_show'=>1])->paginate($this->page_size);
+//        }
+        $currInfo = CurrModel::where($where)->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
         //获取课时个数
         foreach ($currInfo as $k=>$v){
             $currInfo[$k]['classNum']=0;
@@ -132,6 +176,39 @@ class CurrController extends CommonController
 
         return ['currInfo'=>$currInfo,'lastPage'=>$lastPage,'currentPage'=>$currentPage];
 //return $currInfo;
+    }
+
+    //课程免费收费筛选
+    public function getFreeData(Request $request){
+        $cate_id = intval($request->post('cate_id'));
+        //获取此分类的所包含分类id
+        $cateId = $this->getCateId($cate_id); //课程分类id
+        $cateId[]=$cate_id;
+        $search = $request->post('search');  //课程搜索关键字
+        $free_type = $request->post('free_type'); //1 免费 2收费
+        $currInfo=[];
+        //根据条件搜索课程
+            $where=[
+                ['curr_name','like',"$search%"],
+                'is_show'=>1,
+                'curr_status'=>1,
+                'is_pay'=>$free_type
+            ];
+        $currInfo = CurrModel::where($where)->whereIn('curr_cate_id',$cateId)->paginate($this->page_size);
+        //获取课时个数
+        foreach ($currInfo as $k=>$v){
+            $currInfo[$k]['classNum']=0;
+            $chapterInfo = CurrChapterModel::where(['curr_id'=>$v['curr_id']])->get();
+            foreach ($chapterInfo as $key=>$val){
+                $currInfo[$k]['classNum']+=$val['class_num'];
+            }
+        }
+        #最后一页的页码
+        $lastPage = $currInfo->lastPage();
+        #当前页码
+        $currentPage = $currInfo->currentPage();
+
+        return ['currInfo'=>$currInfo,'lastPage'=>$lastPage,'currentPage'=>$currentPage];
     }
 
     //获取分类子id
@@ -185,8 +262,8 @@ class CurrController extends CommonController
             //查询讲师
             $teacherInfo = TeacherModel::where(['t_id'=>$currInfo['t_id']])->first();
         }
-
-        #处理收藏样式
+        //查询相关课程
+        $Relevant_curr = $this->relevant_curr($currInfo);
         #获取用户ID
         $user_id=session('user_id');
 //        $user_id=8;
@@ -210,8 +287,9 @@ class CurrController extends CommonController
                     'teacherInfo'=>$teacherInfo,
                     'chapter'=>$chapter,
                     'collect_status'=>$collect_status,
+                    'userInfo'=>$userInfo,
+                    'relevant_curr'=>$Relevant_curr,
                     'sub_status'=>$sub_status,
-                    'userInfo'=>$userInfo
                 ]
             );
 
@@ -519,6 +597,27 @@ class CurrController extends CommonController
             }
         }
 
+
+    }
+
+
+    //问答
+    public function question(Request $request)
+    {
+        $arr = $request->post();
+        $ques = $arr['ques'];
+        $question = $arr['question'];
+        $data = [
+          'ques'=>$ques,
+          'question'=>$question,
+          'time'=>time()
+        ];
+        $res = QuesModel::insert($data);
+        if($res){
+            return ['code'=>200,'msg'=>'提交成功！'];
+        }else{
+            return ['code'=>300,'msg'=>'提交失败'];
+        }
 
     }
 

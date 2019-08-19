@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Article;
 
 use App\Http\Controllers\Common\CommonController;
+use App\Model\CurrModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -42,6 +43,16 @@ class ArticleController extends CommonController
         }
         //查询 资讯分类
         $cate_Info=DB::table('information_cate')->get();
+
+        //查询所有资讯
+        $Info=DB::table('infomation')->get();
+        foreach($Info as $k=>$v){
+            //查询出每个资讯对应的资讯分类名称
+            $Info[$k]->info_name=DB::table('information_cate')
+                ->where(['info_cate_id'=>$v->info_cate_id])
+                ->value('info_name');
+        }
+
         //热门资讯
         $hot=DB::table('infomation')->where(['info_hot'=>2])->get();
         //用户信息
@@ -49,6 +60,9 @@ class ArticleController extends CommonController
         if(isset($userInfo['pwd'])){
             unset($userInfo['pwd']);
         }
+
+        //查询推荐课程
+        $currInfo = $this->_getRecommend();
         //获取 数据中的条数
         $num = $Info->count();
     	//渲染视图
@@ -58,6 +72,7 @@ class ArticleController extends CommonController
                 'Info'=>$Info,
                 'hot'=>$hot,
                 'userInfo'=>$userInfo,
+                'currInfo'=>$currInfo,
                 'info_cate_id'=>['info_cate_id'=>$info_cate_id],
                 'num'=>$num
             ]
@@ -124,15 +139,19 @@ class ArticleController extends CommonController
                     $lower_id = '';
                 }
             }
+            //查询推荐课程
+            $currInfo = $this->_getRecommend();
             //渲染视图
             return view('article/articlecont',
                 [
+//                    'info_name'=>$info_name,
                     'Info_cate'=>$Info_cate,
                     'Info'=>$Info,
                     'hot'=>$hot,
                     'userInfo'=>$userInfo,
                     'top_id'=>$top_id,
-                    'lower_id'=>$lower_id
+                    'lower_id'=>$lower_id,
+                    'currInfo'=>$currInfo
                 ]
             );
         }else{
@@ -140,8 +159,12 @@ class ArticleController extends CommonController
         }
     }
 
-
-
+    //获取推荐课程
+    private function _getRecommend(){
+        //根据课程学习人数排序进行推荐
+        $currInfo = CurrModel::orderBy('study_num','desc')->limit(2)->get();
+        return $currInfo;
+    }
 
 
 

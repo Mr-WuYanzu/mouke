@@ -14,11 +14,10 @@
     <h3 class="righttit" style="padding-left:50px;">优秀讲师</h3>
     @foreach($teacherInfo as $v)
 
-	<h3 class="righttit" style="padding-left:50px;">优秀讲师</h3>
 
 	<div class="coursepic tecti">
 		<div class="teaimg">
-		<a href="/teacher/teachercont?t_id={{$v['t_id']}}" target="_blank"><img src="{{asset('images/teacher.jpg')}}" width="150"></a>
+		<a href="/teacher/teachercont?t_id={{$v['t_id']}}" target="_blank"><img src="http://curr.img.com/{{$v['header_img']}}" width="150"></a>
 		</div>
 		<div class="teachtext">
 			<h3><a href="/teacher/teachercont?t_id={{$v['t_id']}}" target="_blank" class="teatt">{{$v['t_name']}}</a>&nbsp;&nbsp;<strong>会计基础、会计电算化讲师</strong></h3>

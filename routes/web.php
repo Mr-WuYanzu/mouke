@@ -31,6 +31,7 @@ Route::prefix('/')->group(function(){
     Route::post('cateSearch','Curr\CurrController@cateSearch');
     //课程分页数据查找
     Route::post('/getPageData','Curr\CurrController@getPageData');
+
 	//课程详情
 	Route::get('curr/currcont/{curr_id}','Curr\CurrController@currcont');
 	//章节列表

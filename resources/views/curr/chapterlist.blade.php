@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{{asset('css/course.css')}}"/>
 <script src="{{asset('js/jquery.tabs.js')}}"></script>
 <script src="{{asset('js/mine.js')}}"></script>
+<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 <script type="text/javascript">
 $(function(){
 
@@ -43,7 +44,7 @@ $(function(){
 		</div>
    </div>
    <div class="course_img1">
-	   <img src="images/c1.jpg" height="140">	   
+	   <img src="http://curr.img.com/{{$currInfo['curr_img']}}" height="140">
    </div>
    <div class="course_xq">
        <span class="courstime1"><p>课时<br/><span class="coursxq_num">{{$currInfo['classNum']}}课时</span></p></span>
@@ -86,7 +87,6 @@ $(function(){
 
 				<div class="hide">
                     <form method="post">
-					<div>
                     <div id="star">
                         <span class="startitle">请打分</span>
                         <ul id="grade">
@@ -124,9 +124,9 @@ $(function(){
 					<div>
                      <h3 class="pingjia">提问题</h3>
                     <div class="c_eform">
-                        <input type="text" class="pingjia_con" value="请输入问题标题" onblur="if (this.value =='') this.value='请输入问题标题';this.className='pingjia_con'" onclick="if (this.value=='请输入问题标题') this.value='';this.className='pingjia_con_on'"/><br/>
-                        <textarea rows="7" class="pingjia_con" onblur="if (this.value =='') this.value='请输入问题的详细内容';this.className='pingjia_con'" onclick="if (this.value=='请输入问题的详细内容') this.value='';this.className='pingjia_con_on'">请输入问题的详细内容</textarea>
-                       <a href="#" class="fombtn">发布</a>
+                        <input type="text" class="pingjia_con" name="ques" value="请输入问题标题" onblur="if (this.value =='') this.value='请输入问题标题';this.className='pingjia_con'" onclick="if (this.value=='请输入问题标题') this.value='';this.className='pingjia_con_on'"/><br/>
+                        <textarea rows="7" class="pingjia_con" name="questions" onblur="if (this.value =='') this.value='请输入问题的详细内容';this.className='pingjia_con'" onclick="if (this.value=='请输入问题的详细内容') this.value='';this.className='pingjia_con_on'">请输入问题的详细内容</textarea>
+                       <a href="javascript:;" class="fombtn" id="sub">发布</a>
                        <div class="clearh"></div>
                     </div>
 					<ul class="evalucourse">
@@ -183,8 +183,8 @@ $(function(){
     <h3 class="righttit">授课讲师</h3>
     <div class="teacher">
     <div class="teapic ppi">
-    <a href="teacher.html" target="_blank"><img src="images/teacher.png" width="80" class="teapicy" title="张民智"></a>
-     <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
+    <a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" target="_blank"><img src="http://curr.img.com/{{$teacherInfo['header_img']}}" width="80" class="teapicy" title="张民智"></a>
+     <h3 class="tname"><a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
     </div>
     <div class="clearh"></div>
     <p>{{$teacherInfo['t_desc']}}</p>
@@ -212,12 +212,12 @@ $(function(){
     <h3 class="righttit">相关课程</h3>
     <div class="teacher">
         @foreach($relevant_curr as $k=>$v)
-    <div class="teapic">
-        <a href="#"  target="_blank"><img src="images/c1.jpg" height="60" title="{{$v['curr_name']}}"></a>
-        <h3 class="courh3"><a href="#" class="peptitle" target="_blank">{{$v['curr_name']}}</a></h3>
-    </div>
-    <div class="clearh"></div>
-            @endforeach
+            <div class="teapic">
+                <a href="/curr/chapterlist/{{$v['curr_id']}}"  target="_blank"><img src="http://curr.img.com/{{$v['curr_img']}}" height="60" title="{{$v['curr_name']}}"></a>
+                <h3 class="courh3"><a href="/curr/chapterlist/{{$v['curr_id']}}" class="peptitle" target="_blank">{{$v['curr_name']}}</a></h3>
+            </div>
+            <div class="clearh"></div>
+        @endforeach
 
     </div>
     </div>
@@ -331,6 +331,7 @@ $(function(){
 
 <script type="text/javascript">
     $(function(){
+        alert(111111);
         layui.use(['layer'],function(){
             var layer=layui.layer;
 
@@ -352,7 +353,7 @@ $(function(){
                     layer.msg('请输入评论内容',{icon:5,time:1000});
                     return false;
                 }
-                
+
                 //发送请求提交数据
                 $.post(
                     '/curr/comment/addHandle',
@@ -369,8 +370,29 @@ $(function(){
 
             });
 
+            $("#sub").click(function(){
+                var ques = $("input[name='ques']").val();
+                var questions = $("textarea[name='questions']").val();
+                if(ques == '请输入问题标题'){
+                    //问答
+
+                    layer.msg('请填写问题',{icon:7});
+                }else if(questions == '请输入问题的详细内容'){
+                    layer.msg('请填写提问详情',{icon:7});
+                }
+
+                $.post(
+                    '/question',
+                    {ques:ques,questions:questions},
+                    function (res) {
+                        console.log(res);
+                    }
+                )
+                // alert(questions);
+            })
+
+
         });
     });
 </script>
 
-@endsection
