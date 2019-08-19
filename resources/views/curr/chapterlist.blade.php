@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{{asset('css/course.css')}}"/>
 <script src="{{asset('js/jquery.tabs.js')}}"></script>
 <script src="{{asset('js/mine.js')}}"></script>
+<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 <script type="text/javascript">
 $(function(){
 
@@ -86,7 +87,6 @@ $(function(){
 
 				<div class="hide">
                     <form method="post">
-					<div>
                     <div id="star">
                         <span class="startitle">请打分</span>
                         <ul id="grade">
@@ -124,9 +124,9 @@ $(function(){
 					<div>
                      <h3 class="pingjia">提问题</h3>
                     <div class="c_eform">
-                        <input type="text" class="pingjia_con" value="请输入问题标题" onblur="if (this.value =='') this.value='请输入问题标题';this.className='pingjia_con'" onclick="if (this.value=='请输入问题标题') this.value='';this.className='pingjia_con_on'"/><br/>
-                        <textarea rows="7" class="pingjia_con" onblur="if (this.value =='') this.value='请输入问题的详细内容';this.className='pingjia_con'" onclick="if (this.value=='请输入问题的详细内容') this.value='';this.className='pingjia_con_on'">请输入问题的详细内容</textarea>
-                       <a href="#" class="fombtn">发布</a>
+                        <input type="text" class="pingjia_con" name="ques" value="请输入问题标题" onblur="if (this.value =='') this.value='请输入问题标题';this.className='pingjia_con'" onclick="if (this.value=='请输入问题标题') this.value='';this.className='pingjia_con_on'"/><br/>
+                        <textarea rows="7" class="pingjia_con" name="questions" onblur="if (this.value =='') this.value='请输入问题的详细内容';this.className='pingjia_con'" onclick="if (this.value=='请输入问题的详细内容') this.value='';this.className='pingjia_con_on'">请输入问题的详细内容</textarea>
+                       <a href="javascript:;" class="fombtn" id="sub">发布</a>
                        <div class="clearh"></div>
                     </div>
 					<ul class="evalucourse">
@@ -331,6 +331,7 @@ $(function(){
 
 <script type="text/javascript">
     $(function(){
+        alert(111111);
         layui.use(['layer'],function(){
             var layer=layui.layer;
 
@@ -352,7 +353,7 @@ $(function(){
                     layer.msg('请输入评论内容',{icon:5,time:1000});
                     return false;
                 }
-                
+
                 //发送请求提交数据
                 $.post(
                     '/curr/comment/addHandle',
@@ -369,8 +370,29 @@ $(function(){
 
             });
 
+            $("#sub").click(function(){
+                var ques = $("input[name='ques']").val();
+                var questions = $("textarea[name='questions']").val();
+                if(ques == '请输入问题标题'){
+                    //问答
+
+                    layer.msg('请填写问题',{icon:7});
+                }else if(questions == '请输入问题的详细内容'){
+                    layer.msg('请填写提问详情',{icon:7});
+                }
+
+                $.post(
+                    '/question',
+                    {ques:ques,questions:questions},
+                    function (res) {
+                        console.log(res);
+                    }
+                )
+                // alert(questions);
+            })
+
+
         });
     });
 </script>
 
-@endsection
