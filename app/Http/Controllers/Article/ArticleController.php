@@ -43,16 +43,6 @@ class ArticleController extends CommonController
         }
         //查询 资讯分类
         $cate_Info=DB::table('information_cate')->get();
-
-        //查询所有资讯
-        $Info=DB::table('infomation')->get();
-        foreach($Info as $k=>$v){
-            //查询出每个资讯对应的资讯分类名称
-            $Info[$k]->info_name=DB::table('information_cate')
-                ->where(['info_cate_id'=>$v->info_cate_id])
-                ->value('info_name');
-        }
-
         //热门资讯
         $hot=DB::table('infomation')->where(['info_hot'=>2])->get();
         //用户信息
@@ -60,6 +50,8 @@ class ArticleController extends CommonController
         if(isset($userInfo['pwd'])){
             unset($userInfo['pwd']);
         }
+        //获取 数据中的条数
+        $num = $Info->count();
 
         //查询推荐课程
         $currInfo = $this->_getRecommend();
@@ -74,10 +66,12 @@ class ArticleController extends CommonController
                 'userInfo'=>$userInfo,
                 'currInfo'=>$currInfo,
                 'info_cate_id'=>['info_cate_id'=>$info_cate_id],
-                'num'=>$num
+                'num'=>$num,
+                'Info_cate_id'=>['info_cate_id'=>$info_cate_id],
             ]
         );
     }
+
 
     /**
      * [资讯详情]
@@ -151,7 +145,8 @@ class ArticleController extends CommonController
                     'userInfo'=>$userInfo,
                     'top_id'=>$top_id,
                     'lower_id'=>$lower_id,
-                    'currInfo'=>$currInfo
+                    'currInfo'=>$currInfo,
+                    'info_cate_id'=>$Info['info_cate_id']
                 ]
             );
         }else{

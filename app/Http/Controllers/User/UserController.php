@@ -22,7 +22,7 @@ class UserController extends CommonController
     	//查询用户信息
         $user = UserModel::where(['user_id'=>$user_id])->first();
     	//渲染视图
-        return view('user/usercenter',['user'=>$user]);
+        return view('user/usercenter',['user'=>$user,'userInfo'=>$user]);
     }
 
     /**
@@ -110,10 +110,10 @@ class UserController extends CommonController
     		return ['code'=>2,'font'=>'您还没有订阅课程,请先去订阅'];
     	}
     	$curr_id=$curr_id->toArray();
+//    	dd($curr_id);
     	//查询订阅课程信息
     	$subscribeInfo=$curr_model
-	    				->where('is_show',1)
-	    				->where('curr_status',1)
+	    				->where(['is_show'=>1,'curr_status'=>1])
 	    				->whereIn('curr_id',$curr_id)
 	    				->get()
 	    				->toArray();
@@ -144,5 +144,10 @@ class UserController extends CommonController
     	}else{
     		$this->json_fail('操作失败,请检查网络');
     	}
+    }
+
+    //我的订单
+    public function myOrder(){
+
     }
 }

@@ -28,7 +28,9 @@
 		<p class="courstime">课程评价：<img width="71" height="14" src="/images/evaluate5.png">&nbsp;&nbsp;<span class="hidden-sm hidden-xs">5.0分（10人评价）</span></p>
         <!--<p><a class="state end">完结</a></p>-->      
         <span class="coursebtn">
-            @if($currInfo['curr_type']==1)
+            @if($pay_status==2)
+                <a class="btnlink" id="buy_curr" curr_id="{{$currInfo['curr_id']}}" style="cursor: pointer">购买课程</a>&nbsp&nbsp&nbsp&nbsp
+            @elseif($currInfo['curr_type']==1)
                 @if($currInfo['live_status']==2)
                     <a class="btnlink" href="http://zhibo.mk.com/curr?curr_id={{$currInfo['curr_id']}}&t_id={{$teacherInfo['t_id']}}">观看直播</a>&nbsp&nbsp&nbsp&nbsp
                 @else
@@ -47,11 +49,11 @@
             @endif
 
             @if($sub_status == '')
-                <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
+                <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$currInfo->curr_id}}" id="subscribe">订阅课程</a>
             @elseif($sub_status == 1)
-                <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe_no">取消订阅</a>
+                <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$currInfo->curr_id}}" id="subscribe_no">取消订阅</a>
             @elseif($sub_status == 2)
-                    <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$teacherInfo->curr_id}}" id="subscribe">订阅课程</a>
+                    <a class="layui-btn layui-btn-normal" href="javascript:;" curr_id="{{$currInfo->curr_id}}" id="subscribe">订阅课程</a>
             @endif
 
 
@@ -320,6 +322,26 @@
                 window.open("http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?"+s.join('&'));
             });
 
+            $('#buy_curr').click(function () {
+                var curr_id = $(this).attr('curr_id');
+                $.ajax({
+                    url:'/orderAdd',
+                    type:'post',
+                    data:{curr_id:curr_id},
+                    dataType:'json',
+                    success:function (res) {
+                        if(res.status==200){
+                            layer.msg(res.msg,{icon:1});
+                        }else if(res.status==402){
+                            layer.msg(res.msg,{icon:5,time:1500},function () {
+                                location.href="/login/login";
+                            })
+                        }else{
+                            layer.msg(res.msg,{icon:5});
+                        }
+                    }
+                })
+            })
 
 
         })

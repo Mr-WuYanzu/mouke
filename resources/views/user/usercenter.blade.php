@@ -1,6 +1,6 @@
 @extends('layouts.layouts')
 
-@section('title','登录')
+@section('title','个人中心')
 
 @section('content')
 
@@ -41,7 +41,7 @@
 <div class="membertab">
     <div class="memblist">
         <div class="membhead">
-            <div style="text-align:center;"><img src="images/0-0.JPG" width="80" ></div>
+            <div style="text-align:center;"><img src="/images/0-0.JPG" width="80" ></div>
             <div style="width:220px;text-align:center;">
                 <p class="membUpdate mine">{{$user->user_name}}</p>
                 <p class="membUpdate mine"><a href="mysetting.html">修改信息</a>&nbsp;|&nbsp;<a href="myrepassword.html">修改密码</a></p>
@@ -54,8 +54,8 @@
                 <li class="currnav"><a class="mb1 curr" href="javascript:void(0);">我的课程</a></li>
                 <li><a class="mb3 collect" href="javascript:void(0);">我的收藏</a></li>
                 <li><a class="mb4 subscribe" href="javascript:void(0);">我的订阅</a></li>
-                <li><a class="mb12" href="myhomework.html">我的订单</a></li>
-                <li><a class="mb2" href="training_list.html" target="_blank">我的题库</a></li>
+                <li><a class="mb12 myOrder" href="javascript:void(0);">我的订单</a></li>
+                <li><a class="mb2" href="javascript:void(0);" target="_blank">我的题库</a></li>
             </ul>
 
         </div>

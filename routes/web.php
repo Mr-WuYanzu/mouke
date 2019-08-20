@@ -99,6 +99,9 @@ Route::prefix('/admin')->group(function(){
 	Route::get('index','Admin\AdminController@index');
 });
 
+//课程加入订单
+Route::post('/orderAdd','curr\CurrController@orderAdd');
+
 #订阅课程
 Route::post('/course/subscribe','Curr\CurrController@subscribe');
 #取消订阅

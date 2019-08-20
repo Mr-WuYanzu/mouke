@@ -76,7 +76,7 @@
                                         <span class="mulu_zd">+</span></dt>
                                     <div class="mulu_con">
                                         @foreach($v['son'] as $kk=>$vv)
-                                            <a href="video.html"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>
+                                            <a href="/curr/video/{{$currInfo['curr_id']}}"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>
                                         @endforeach
                                     </div>
                                 </div>
@@ -109,11 +109,14 @@
                         <ul class="evalucourse">
                             @foreach($commentInfo as $v)
                                 <li>
-                        	<span class="pephead"><img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">
-                            <p class="pepname">{{$v['user_name']}}</p>
-                            </span>
-                                    <span class="pepcont"><p>{{$v['comment_detail']}}</p>
-                            <p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p></span>
+                                    <span class="pephead">
+                                        <img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">
+                                        <p class="pepname">{{$v['user_name']}}</p>
+                                    </span>
+                                    <span class="pepcont">
+                                        <p>{{$v['comment_detail']}}</p>
+                                        <p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p>
+                                    </span>
                                 </li>
                             @endforeach
                         </ul>
@@ -184,8 +187,8 @@
                 <h3 class="righttit">授课讲师</h3>
                 <div class="teacher">
                     <div class="teapic ppi">
-                        <a href="teacher.html" target="_blank"><img src="images/teacher.png" width="80" class="teapicy" title="张民智"></a>
-                        <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
+                        <a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" target="_blank"><img src="http://curr.img.com/{{$teacherInfo['header_img']}}" width="80" class="teapicy" title="{{$teacherInfo['t_name']}}"></a>
+                        <h3 class="tname"><a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
                     </div>
                     <div class="clearh"></div>
                     <p>{{$teacherInfo['t_desc']}}</p>

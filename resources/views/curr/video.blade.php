@@ -64,7 +64,7 @@
 	<span class="taskspan"><span class="ts">课时100</span>&nbsp;&nbsp;<b class="tasktit">会计的概念与目标1</b></span>
 	<div style="width:100%;margin-top:20px;">
 		<video width="auto" id="example_video_1" class="video-js vjs-default-skin  vjs-big-play-centered vvi " controls preload="none"  poster="/enew/images/c8.jpg" data-setup="{}"><!--poster是视频未播放前的展示图片-->
-			<source src="" type='video/mp4' id="mp4" />
+			<source src="http://curr.video.com/{{$video_url}}" type='video/mp4' id="mp4" />
 			<source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' id="webm" />
 			<source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' id="ogv" />
 		</video>
@@ -99,7 +99,7 @@
 					@foreach($chapterInfo as $k=>$v)
 						<dt>第{{$v['chapter_num']}}章&nbsp;&nbsp;{{$v['chapter_name']}}</dt>
 						@foreach($v['son'] as $kk=>$vv)
-							<a href="#"><dd><i class="forwa nn"></i><strong class="cataloglink" class_hour_id="{{$vv['class_id']}}">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong></dd></a>
+							<a href="/curr/video/{{$curr_id}}?class_num={{$vv['class_hour_num']}}"><dd><i class="forwa nn"></i><strong class="cataloglink" class_hour_id="{{$vv['class_id']}}">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong></dd></a>
 						@endforeach
 					@endforeach
 				</dl>
@@ -153,49 +153,49 @@
 </body>
 </html>
 
-<script>
-	$(function () {
-		$(document).on('click','.cataloglink',function () {
-			var class_id = $(this).attr('class_hour_id');
-			var _mp4 = $('#mp4');
-			var _webm = $('#webm');
-			var _ogv = $('#ogv');
-			$.ajax({
-				url:'/curr/getvideo',
-				type:'post',
-				data:{class_id:class_id},
-				dataType:'json',
-				success:function (res) {
-					if(res.status==200){
-						// example_video_1.attr('src',res.video_url);
-						if(res.video_type=='mp4'){
-							_mp4.attr('src','');
-							_webm.attr('src','');
-							_ogv.attr('src','');
-							_mp4.attr('src','http://curr.video.com/'+res.video_url)
-						}else if(res.video_type=='webm'){
-							_mp4.attr('src','');
-							_webm.attr('src','');
-							_ogv.attr('src','');
-							_webm.attr('src','http://curr.video.com/'+res.video_url)
-						}else if(res.video_type=='ogv'){
-							_mp4.attr('src','');
-							_webm.attr('src','');
-							_ogv.attr('src','');
-							_ogv.attr('src','http://curr.video.com/'+res.video_url)
-						}
-					}else if(res.status==201){
-						a=confirm('这是一个直播课时，是否跳转至直播页面');
-						if(a){
-							location.href=res.live_url;
-						}else{
-							a.close();
-						}
-					}else{
-						alert(res.msg);
-					}
-				}
-			})
-		})
-	})
-</script>
+{{--<script>--}}
+	{{--$(function () {--}}
+		{{--$(document).on('click','.cataloglink',function () {--}}
+			{{--var class_id = $(this).attr('class_hour_id');--}}
+			{{--var _mp4 = $('#mp4');--}}
+			{{--var _webm = $('#webm');--}}
+			{{--var _ogv = $('#ogv');--}}
+			{{--$.ajax({--}}
+				{{--url:'/curr/getvideo',--}}
+				{{--type:'post',--}}
+				{{--data:{class_id:class_id},--}}
+				{{--dataType:'json',--}}
+				{{--success:function (res) {--}}
+					{{--if(res.status==200){--}}
+						{{--// example_video_1.attr('src',res.video_url);--}}
+						{{--if(res.video_type=='mp4'){--}}
+							{{--_mp4.attr('src','');--}}
+							{{--_webm.attr('src','');--}}
+							{{--_ogv.attr('src','');--}}
+							{{--_mp4.attr('src','http://curr.video.com/'+res.video_url)--}}
+						{{--}else if(res.video_type=='webm'){--}}
+							{{--_mp4.attr('src','');--}}
+							{{--_webm.attr('src','');--}}
+							{{--_ogv.attr('src','');--}}
+							{{--_webm.attr('src','http://curr.video.com/'+res.video_url)--}}
+						{{--}else if(res.video_type=='ogv'){--}}
+							{{--_mp4.attr('src','');--}}
+							{{--_webm.attr('src','');--}}
+							{{--_ogv.attr('src','');--}}
+							{{--_ogv.attr('src','http://curr.video.com/'+res.video_url)--}}
+						{{--}--}}
+					{{--}else if(res.status==201){--}}
+						{{--a=confirm('这是一个直播课时，是否跳转至直播页面');--}}
+						{{--if(a){--}}
+							{{--location.href=res.live_url;--}}
+						{{--}else{--}}
+							{{--a.close();--}}
+						{{--}--}}
+					{{--}else{--}}
+						{{--alert(res.msg);--}}
+					{{--}--}}
+				{{--}--}}
+			{{--})--}}
+		{{--})--}}
+	{{--})--}}
+{{--</script>--}}

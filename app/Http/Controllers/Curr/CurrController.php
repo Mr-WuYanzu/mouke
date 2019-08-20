@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Curr;
 
 use App\curr\CurrCate;
+use App\curr\CurrOrderModel;
 use App\Model\CurrChapterModel;
 use App\Model\CurrClassHourModel;
 use App\Model\CurrModel;
@@ -276,6 +277,15 @@ class CurrController extends CommonController
             $sub_status='';
             $collect_status='';
         }
+        $pay_status=1;
+        if($currInfo['is_pay']==2){
+            //查询我的课程里边有没有此课程
+            $my_curr = MyCurrModel::where(['curr_id'=>$currInfo['curr_id'],'user_id'=>$user_id])->first();
+            if($my_curr){
+                $pay_status=2;
+            }
+        }
+
         //用户信息
         $userInfo=$this->getUserInfo();
         if(isset($userInfo['pwd'])){
@@ -290,6 +300,7 @@ class CurrController extends CommonController
                     'userInfo'=>$userInfo,
                     'relevant_curr'=>$Relevant_curr,
                     'sub_status'=>$sub_status,
+                    'pay_status'=>$pay_status
                 ]
             );
 
@@ -376,6 +387,7 @@ class CurrController extends CommonController
      */
     public function video(Request $request,$curr_id)
     {
+        $class_hour_num = $request->get('class_num');
         $userInfo = $this->getUserInfo();
         if(empty($userInfo)){
             return redirect('/login/login');
@@ -385,8 +397,8 @@ class CurrController extends CommonController
         //根据课程id查询课程详情
         $currInfo = CurrModel::where(['curr_id'=>$curr_id])->first();
         //查询课程章节
-        $chapter = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
-        $chapterInfo=$this->getClassHour($chapter);
+        $chapters = CurrChapterModel::where(['curr_id'=>$currInfo['curr_id']])->get();
+        $chapterInfo=$this->getClassHour($chapters);
         //加入我的课程表
         $data=[
             'curr_id'=>$curr_id,
@@ -394,15 +406,19 @@ class CurrController extends CommonController
         ];
         #先查找此用户有没有学过此课程
         $my_currInfo = MyCurrModel::where($data)->first();
+
         if(empty($my_currInfo)){
-            $data['ctime']=time();
-            $my_curr_result = MyCurrModel::insert($data);
-            $study_num = CurrModel::where('curr_id',$curr_id)->value('study_num');
-            $curr_result = CurrModel::where('curr_id',$curr_id)->update(['study_num'=>$study_num['study_num']+1]);
+            if($currInfo['is_pay']!=2) {
+                $data['ctime'] = time();
+                $my_curr_result = MyCurrModel::insert($data);
+                $study_num = CurrModel::where('curr_id', $curr_id)->value('study_num');
+                $curr_result = CurrModel::where('curr_id', $curr_id)->update(['study_num' => $study_num['study_num'] + 1]);
+            }
         }
-//        dd($chapterInfo);
+        //默认查询第一个课时
+        $classHourInfo = CurrClassHourModel::where(['chapter_id'=>$chapters[0]['chapter_id']??'','class_hour_num'=>$class_hour_num,'video_status'=>1])->value('class_data');
         //渲染模版
-        return view('curr/video',['chapterInfo'=>$chapterInfo,'curr_id'=>$curr_id]);
+        return view('curr/video',['chapterInfo'=>$chapterInfo,'curr_id'=>$curr_id,'video_url'=>$classHourInfo]);
     }
 
     //获取点击课时的视频
@@ -444,6 +460,7 @@ class CurrController extends CommonController
      * @param Request $request
      */
     public function subscribe(Request $request){
+
         #接受课程id
         $curr_id=$request->post('curr_id');
         if(empty($curr_id)){
@@ -600,6 +617,50 @@ class CurrController extends CommonController
 
     }
 
+    #添加订单
+    public function orderAdd(Request $request){
+        $userInfo = $this->getUserInfo();
+        if(empty($userInfo)){
+            return ['status'=>402,'msg'=>'请登录'];
+        }
+
+        $curr_id = intval($request->post('curr_id'));
+        if(empty($curr_id)){
+            return ['status'=>109,'msg'=>'请选择课程'];
+        }
+        //验证此课程是否付费
+        $currInfo = CurrModel::where(['curr_id'=>$curr_id,'is_show'=>1,'is_pay'=>2,'status'=>2])->first();
+        if(empty($currInfo)){
+            return ['status'=>109,'msg'=>'请选择课程'];
+        }
+        //查询用户有没有此课程的订单
+        $orderInfo = CurrOrderModel::where(['curr_id'=>$currInfo['curr_id'],'user_id'=>$userInfo['user_id']])->whereIn('pay_status',[1,2])->first();
+        if($orderInfo){
+            if($orderInfo['pay_status']==2){
+                return ['status'=>108,'msg'=>'你已经购买过此课程了'];
+            }else{
+                return ['status'=>108,'msg'=>'此课程已经在订单了，请尽快支付'];
+            }
+        }else {
+            //获取订单号
+            $order_no = $this->order_no($userInfo['user_id']);
+            //添加订单表的数据
+            $data = [
+                'order_no' => $order_no,
+                'curr_id' => $curr_id,
+                't_id' => $currInfo['t_id'],
+                'amount' => $currInfo['curr_price'],
+                'user_id'=>$userInfo['user_id'],
+                'ctime'=>time()
+            ];
+            $result = CurrOrderModel::insert($data);
+            if($result){
+                return ['status'=>200,'msg'=>'加入订单成功,请前往订单页面进行结算'];
+            }else{
+                return ['status'=>108,'msg'=>'购买失败'];
+            }
+        }
+    }
 
     //问答
     public function question(Request $request)

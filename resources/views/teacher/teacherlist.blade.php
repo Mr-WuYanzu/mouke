@@ -20,7 +20,7 @@
 		<a href="/teacher/teachercont?t_id={{$v['t_id']}}" target="_blank"><img src="http://curr.img.com/{{$v['header_img']}}" width="150"></a>
 		</div>
 		<div class="teachtext">
-			<h3><a href="/teacher/teachercont?t_id={{$v['t_id']}}" target="_blank" class="teatt">{{$v['t_name']}}</a>&nbsp;&nbsp;<strong>会计基础、会计电算化讲师</strong></h3>
+			<h3><a href="/teacher/teachercont?t_id={{$v['t_id']}}" target="_blank" class="teatt">{{$v['t_name']}}</a>&nbsp;&nbsp;<strong>{{$v['teacher_direction']}}</strong></h3>
 			<h4>个人简介</h4>
 			<p>{{str_replace(mb_substr($v['t_desc'],100,mb_strlen($v['t_desc'])),'...',$v['t_desc'])}}</p>
 			<h4>授课风格</h4>
