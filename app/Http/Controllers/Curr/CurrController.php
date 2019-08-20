@@ -331,6 +331,17 @@ class CurrController extends CommonController
         if(isset($userInfo['pwd'])){
             unset($userInfo['pwd']);
         }
+        //查询该用户是否有提出问答的数据【用户登录 并且该用户发出过问答 就在问答下面展示 提出的问答数据】
+        $user_id=session('user_id');
+//        $user_id=5;
+        if(!empty($user_id)){
+            $questInfo=DB::table('question')->where('user_id',$user_id)->orderBy('quest_id','desc')->get();
+            foreach ($questInfo as $k=>$v){
+                $questInfo[$k]->user_name=$userInfo->user_name;
+            }
+        }else{
+            $questInfo='';
+        }
     	//渲染模版
     	return view('curr/chapterlist',
             [
@@ -339,7 +350,8 @@ class CurrController extends CommonController
                 'teacherInfo'=>$teacherInfo,
                 'chapterInfo'=>$chapterInfo,
                 'relevant_curr'=>$Relevant_curr,
-                'userInfo'=>$userInfo
+                'userInfo'=>$userInfo,
+                'questInfo'=>$questInfo
             ]
         );
     }

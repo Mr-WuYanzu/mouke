@@ -76,7 +76,51 @@
                                         <span class="mulu_zd">+</span></dt>
                                     <div class="mulu_con">
                                         @foreach($v['son'] as $kk=>$vv)
-                                            <a href="video.html"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>
+
+                                            {{--<a href="video.html"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>--}}
+                                        {{--@endforeach--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--@endforeach--}}
+                        {{--</dl>--}}
+                    {{--</div>--}}
+
+
+                    {{--<div class="hide">--}}
+                        {{--<form method="post">--}}
+                            {{--<div>--}}
+                                {{--<div id="star">--}}
+                                    {{--<span class="startitle">请打分</span>--}}
+                                    {{--<ul id="grade">--}}
+                                        {{--<li class="num"><a href="javascript:;">1</a></li>--}}
+                                        {{--<li class="num"><a href="javascript:;">2</a></li>--}}
+                                        {{--<li class="num"><a href="javascript:;">3</a></li>--}}
+                                        {{--<li class="num"><a href="javascript:;">4</a></li>--}}
+                                        {{--<li class="num"><a href="javascript:;">5</a></li>--}}
+                                    {{--</ul>--}}
+                                    {{--<span></span>--}}
+                                    {{--<p></p>--}}
+                                {{--</div>--}}
+                                {{--<div class="c_eform">--}}
+                                    {{--<textarea rows="7" id="comment_detail" class="pingjia_con" onblur="if (this.value =='') this.value='评价详细内容';this.className='pingjia_con'" onclick="if (this.value=='评价详细内容') this.value='';this.className='pingjia_con_on'">评价详细内容</textarea>--}}
+                                    {{--<a style="cursor:pointer;" id="addComment" class="fombtn">发布评论</a>--}}
+                                    {{--<div class="clearh"></div>--}}
+                                {{--</div>--}}
+                        {{--</form>--}}
+                        {{--<ul class="evalucourse">--}}
+                            {{--@foreach($commentInfo as $v)--}}
+                                {{--<li>--}}
+                        	{{--<span class="pephead"><img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">--}}
+                            {{--<p class="pepname">{{$v['user_name']}}</p>--}}
+                            {{--</span>--}}
+                                    {{--<span class="pepcont"><p>{{$v['comment_detail']}}</p>--}}
+                            {{--<p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p></span>--}}
+                                {{--</li>--}}
+                            {{--@endforeach--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+
+                                            <a href="/curr/video/{{$currInfo['curr_id']}}"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>
                                         @endforeach
                                     </div>
                                 </div>
@@ -109,15 +153,19 @@
                         <ul class="evalucourse">
                             @foreach($commentInfo as $v)
                                 <li>
-                        	<span class="pephead"><img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">
-                            <p class="pepname">{{$v['user_name']}}</p>
-                            </span>
-                                    <span class="pepcont"><p>{{$v['comment_detail']}}</p>
-                            <p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p></span>
+                                    <span class="pephead">
+                                        <img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">
+                                        <p class="pepname">{{$v['user_name']}}</p>
+                                    </span>
+                                    <span class="pepcont">
+                                        <p>{{$v['comment_detail']}}</p>
+                                        <p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p>
+                                    </span>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
+
                 </div>
 
 
@@ -125,30 +173,28 @@
                     <div>
                         <h3 class="pingjia">提问题</h3>
                         <div class="c_eform">
-                            <input type="text" class="pingjia_con" value="请输入问题标题" onblur="if (this.value =='') this.value='请输入问题标题';this.className='pingjia_con'" onclick="if (this.value=='请输入问题标题') this.value='';this.className='pingjia_con_on'"/><br/>
-                            <textarea rows="7" class="pingjia_con" onblur="if (this.value =='') this.value='请输入问题的详细内容';this.className='pingjia_con'" onclick="if (this.value=='请输入问题的详细内容') this.value='';this.className='pingjia_con_on'">请输入问题的详细内容</textarea>
-                            <a href="#" class="fombtn">发布</a>
+                            <input type="text" id="quest_title" class="pingjia_con" placeholder="请输入问题标题"/><br/>
+                            <textarea rows="7" id="quest_detail" class="pingjia_con" placeholder="请输入详细内容"></textarea>
+                            <a href="javascript:;" class="fombtn" curr_id="{{$currInfo['curr_id']}}" id="quest">发布</a>
                             <div class="clearh"></div>
                         </div>
-                        <ul class="evalucourse">
-                            <li>
-                        	<span class="pephead"><img src="images/0-0.JPG" width="50" title="候候">
-							<p class="pepname">候候</p>
-                            </span>
-                                <span class="pepcont">
-                            <p><a href="#" class="peptitle" target="_blank">2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年?</a></p>
-                            <p class="peptime pswer"><span class="pepask">回答(<strong><a class="bluelink" href="#">10</a></strong>)&nbsp;&nbsp;&nbsp;&nbsp;浏览(<strong><a class="bluelink" href="#">10</a></strong>)</span>2015-01-02</p>
-                            </span>
-                            </li>
-                            <li>
-                        	<span class="pephead"><img src="images/0-0.JPG" width="50" title="候候">
-							<p class="pepname">候候</p>
-                            </span>
-                                <span class="pepcont">
-							<p><a href="#" class="peptitle" target="_blank">2013年国家公务员考试真题2013年国家公务员考试真题2013年国家公务员考试真题2013年?</a></p>
-                            <p class="peptime pswer"><span class="pepask">回答(<strong><a class="bluelink" href="#">10</a></strong>)&nbsp;&nbsp;&nbsp;&nbsp;浏览(<strong><a class="bluelink" href="#">10</a></strong>)</span>2015-01-02</p>
-                            </span>
-                            </li>
+                        <ul class="evalucourse ul">
+                            @if($questInfo == '')
+
+                            @else
+                                @foreach($questInfo as $k=>$v)
+                                <li>
+                                    <span class="pephead"><img src="images/0-0.JPG" width="50" title="" id="img_username">
+                                    <p class="pepname" id="username">{{$v->user_name}}</p>
+                                    </span>
+                                        <span class="pepcont">
+                                    <p id="q_title"><a href="#" class="peptitle" target="_blank">{{$v->quest_title}}</a></p>
+                                    <p class="peptime pswer">{{$v->create_time}}</p>
+                                    </span>
+                                </li>
+                            @endforeach
+                            @endif
+
                         </ul>
 
                     </div>
@@ -164,6 +210,7 @@
                             <li>
                                 <p class="mbm mem_not"><a href="#" class="peptitle">资料.rar</a></p>
                                 <p class="gray"><b class="coclass">课时：<a href="#" target="_blank">会计的概念与目标2</a></b><b class="cotime">上传时间：<b class="coclass" >2015-05-8</b></b></p>
+
 
 
 
@@ -184,8 +231,10 @@
                 <h3 class="righttit">授课讲师</h3>
                 <div class="teacher">
                     <div class="teapic ppi">
-                        <a href="teacher.html" target="_blank"><img src="images/teacher.png" width="80" class="teapicy" title="张民智"></a>
-                        <h3 class="tname"><a href="teacher.html" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
+
+                        <a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" target="_blank"><img src="http://curr.img.com/{{$teacherInfo['header_img']}}" width="80" class="teapicy" title="{{$teacherInfo['t_name']}}"></a>
+                        <h3 class="tname"><a href="/teacher/teachercont?t_id={{$teacherInfo['t_id']}}" class="peptitle" target="_blank">{{$teacherInfo['t_name']}}</a></h3>
+
                     </div>
                     <div class="clearh"></div>
                     <p>{{$teacherInfo['t_desc']}}</p>
@@ -321,17 +370,20 @@
 
         </div>
     </div>
-</div>
 
 
-<div class="clearh"></div>
-</div>
-<!-- InstanceEndEditable -->
+
+    </div>
 
 
-<div class="clearh"></div>
+    <div class="clearh"></div>
+    </div>
+    <!-- InstanceEndEditable -->
 
-<script type="text/javascript">
+
+    <div class="clearh"></div>
+
+    <script type="text/javascript">
 
         $(function(){
             layui.use(['layer'],function(){
@@ -372,6 +424,55 @@
                     )
 
                 });
+                //问答
+                $('#quest').click(function () {
+                    //获取问答的标题
+                    var quest_title=$("#quest_title").val();
+                    if(quest_title == ''){
+                        layer.msg('问答的标题不能为空',{icon:2,time:2000});
+                        return false;
+                    }
+                    //获取问答的内容
+                    var quest_detail=$("#quest_detail").val();
+                    if(quest_detail == ''){
+                        layer.msg('问答的内容不能为空',{icon:2,time:2000});
+                        return false;
+                    }
+                    //获取课程的id
+                    var curr_id=$(this).attr('curr_id');
+                    $.post(
+                        "/curr/questionadd",
+                        {quest_title:quest_title,quest_detail:quest_detail,curr_id:curr_id},
+                        function(res){
+                            // console.log(res);
+                            if(res.code == 1){
+                                layer.msg(res.msg,{icon:res.code,time:1000});
+                                //显示用户提出的问题
+                                // $("#q_title").text(res.data.quest_title);
+                                // $("#username").text(res.data.username);
+                                // $("#img_username").text(res.data.username);
+                                $('.ul').prepend(
+                                    '<li class="li">\n' +
+                                    '<span class="pephead"><img src="images/0-0.JPG" width="50" title="" id="img_username">\n' +
+                                    '<p class="pepname" id="username">'+res.data.username+'</p>\n' +
+                                    '</span>\n' +
+                                    '<span class="pepcont">\n' +
+                                    '<p id="q_title"><a href="#" class="peptitle" target="_blank">'+res.data.quest_title+'</a></p>\n' +
+                                    '<p class="peptime pswer">'+res.data.create_time+'</p>\n' +
+                                    '</span>\n' +
+                                    '</li>'
+                                )
+                            }else if(res.code == 2){
+                                layer.msg(res.msg,{icon:res.code,time:2000},function(){
+                                    location.href='/login';
+                                });
+                            }else{
+                                layer.msg(res.msg,{icon:res.code,time:2000});
+                            }
+                        }
+                    )
+                })
+
 
             });
         });

@@ -103,3 +103,5 @@ Route::prefix('/admin')->group(function(){
 Route::post('/course/subscribe','Curr\CurrController@subscribe');
 #取消订阅
 Route::post('/course/subscribe_no','Curr\CurrController@subscribe_no');
+#课程问答
+Route::post('/curr/questionadd','Curr\QuestionController@questionadd');
