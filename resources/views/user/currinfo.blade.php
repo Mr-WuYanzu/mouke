@@ -12,7 +12,7 @@
                         @foreach($currInfo as $k => $v)
                         <li>
                             <div class="courseli">
-                                <a href="/curr/currcont/{{$v['curr_id']}}" target="_blank"><img width="230" src="{{$v['curr_img']}}"></a>
+                                <a href="/curr/currcont/{{$v['curr_id']}}" target="_blank"><img width="230" src="http://curr.img.com/{{$v['curr_img']}}"></a>
                                 <p class="memb_courname"><a href="/curr/currcont/{{$v['curr_id']}}" class="blacklink">{{$v['curr_name']}}</a></p>
                                 <div class="mpp">
                                     <div class="lv" style="width:20%;"></div>

@@ -77,49 +77,6 @@
                                     <div class="mulu_con">
                                         @foreach($v['son'] as $kk=>$vv)
 
-                                            {{--<a href="video.html"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>--}}
-                                        {{--@endforeach--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--@endforeach--}}
-                        {{--</dl>--}}
-                    {{--</div>--}}
-
-
-                    {{--<div class="hide">--}}
-                        {{--<form method="post">--}}
-                            {{--<div>--}}
-                                {{--<div id="star">--}}
-                                    {{--<span class="startitle">请打分</span>--}}
-                                    {{--<ul id="grade">--}}
-                                        {{--<li class="num"><a href="javascript:;">1</a></li>--}}
-                                        {{--<li class="num"><a href="javascript:;">2</a></li>--}}
-                                        {{--<li class="num"><a href="javascript:;">3</a></li>--}}
-                                        {{--<li class="num"><a href="javascript:;">4</a></li>--}}
-                                        {{--<li class="num"><a href="javascript:;">5</a></li>--}}
-                                    {{--</ul>--}}
-                                    {{--<span></span>--}}
-                                    {{--<p></p>--}}
-                                {{--</div>--}}
-                                {{--<div class="c_eform">--}}
-                                    {{--<textarea rows="7" id="comment_detail" class="pingjia_con" onblur="if (this.value =='') this.value='评价详细内容';this.className='pingjia_con'" onclick="if (this.value=='评价详细内容') this.value='';this.className='pingjia_con_on'">评价详细内容</textarea>--}}
-                                    {{--<a style="cursor:pointer;" id="addComment" class="fombtn">发布评论</a>--}}
-                                    {{--<div class="clearh"></div>--}}
-                                {{--</div>--}}
-                        {{--</form>--}}
-                        {{--<ul class="evalucourse">--}}
-                            {{--@foreach($commentInfo as $v)--}}
-                                {{--<li>--}}
-                        	{{--<span class="pephead"><img src="{{asset('images/0-0.JPG')}}" width="50" title="候候">--}}
-                            {{--<p class="pepname">{{$v['user_name']}}</p>--}}
-                            {{--</span>--}}
-                                    {{--<span class="pepcont"><p>{{$v['comment_detail']}}</p>--}}
-                            {{--<p class="peptime pswer">{{date('Y-m-d H:i:s',$v['create_time'])}}</p></span>--}}
-                                {{--</li>--}}
-                            {{--@endforeach--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-
                                             <a href="/curr/video/{{$currInfo['curr_id']}}"><dd><strong class="cataloglink">课时{{$vv['class_hour_num']}}：{{$vv['class_name']}}</strong><i class="fini nn"></i></dd></a>
                                         @endforeach
                                     </div>
